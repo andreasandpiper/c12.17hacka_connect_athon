@@ -5,7 +5,7 @@
 body{
     width: 100vw;
     height: 100vh;
-    background-color: #409df3;
+    background-color: #181818;
 }
 
 header{
@@ -37,7 +37,7 @@ header{
     position: relative;
     width: 90%;
     padding-bottom: 77%;
-    background-color: #1b6d85;
+    background-color: #181818;
 }
 
 .game_board{
@@ -51,6 +51,9 @@ header{
     -moz-box-shadow: 0px 0px 14px 3px rgba(255,255,255,1);
     box-shadow: 0px 0px 14px 3px rgba(255,255,255,1);
     z-index: 5;
+    -webkit-box-shadow: inset 0px 0px 14px 3px rgba(255,255,255,1);
+    -moz-box-shadow: inset 0px 0px 14px 3px rgba(255,255,255,1);
+    box-shadow: inset 0px 0px 14px 3px rgba(255,255,255,1);
 }
 
 .square {
@@ -75,7 +78,7 @@ header{
 ********** Specific Heights Will Change *********
 ************************************************/
 
-@keyframes fallToRow1 {
+@keyframes fallToRow0 {
     from {
         opacity: 0;
         transform: translate3d(0, -5vh, 0);
@@ -87,67 +90,13 @@ header{
     }
 }
 
-.fallToRow1 {
-    animation-name: fallToRow1;
+.fallToRow0 {
+    animation-name: fallToRow0;
     animation-duration: 500ms;
 }
 
 
-@keyframes fallToRow2 {
-    from {
-        opacity: 0;
-        transform: translate3d(0, -15vh, 0);
-    }
-
-    to {
-        opacity: 1;
-        transform: none;
-    }
-}
-
-.fallToRow2 {
-    animation-name: fallToRow2;
-    animation-duration: 1000ms;
-}
-
-
-@keyframes fallToRow3 {
-    from {
-        opacity: 0;
-        transform: translate3d(0, -25vh, 0);
-    }
-
-    to {
-        opacity: 1;
-        transform: none;
-    }
-}
-
-.fallToRow3 {
-    animation-name: fallToRow3;
-    animation-duration: 1500ms;
-}
-
-
-@keyframes fallToRow4 {
-    from {
-        opacity: 0;
-        transform: translate3d(0, -35vh, 0);
-    }
-
-    to {
-        opacity: 1;
-        transform: none;
-    }
-}
-
-.fallToRow4 {
-    animation-name: fallToRow4;
-    animation-duration: 2000ms;
-}
-
-
-@keyframes fallToRow5 {
+@keyframes fallToRow1 {
     from {
         opacity: 0;
         transform: translate3d(0, -45vh, 0);
@@ -159,12 +108,13 @@ header{
     }
 }
 
-.fallToRow5 {
-    animation-name: fallToRow5;
-    animation-duration: 2500ms;
+.fallToRow1 {
+    animation-name: fallToRow1;
+    animation-duration: 1000ms;
 }
 
-@keyframes fallToRow6 {
+
+@keyframes fallToRow2 {
     from {
         opacity: 0;
         transform: translate3d(0, -55vh, 0);
@@ -176,8 +126,61 @@ header{
     }
 }
 
-.fallToRow6 {
-    animation-name: fallToRow6;
+.fallToRow2 {
+    animation-name: fallToRow2;
+    animation-duration: 1500ms;
+}
+
+
+@keyframes fallToRow3 {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -65vh, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.fallToRow3 {
+    animation-name: fallToRow3;
+    animation-duration: 2000ms;
+}
+
+
+@keyframes fallToRow4 {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -75vh, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.fallToRow4 {
+    animation-name: fallToRow4;
+    animation-duration: 2500ms;
+}
+
+@keyframes fallToRow5 {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -85vh, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.fallToRow5 {
+    animation-name: fallToRow5;
     animation-duration: 3000ms;
 }
 
@@ -186,7 +189,7 @@ header{
 .fallToRow3,
 .fallToRow4,
 .fallToRow5,
-.fallToRow6{
+.fallToRow0{
     animation-fill-mode: both;
 }
 
@@ -240,7 +243,7 @@ header{
 }
 
 .preDropDisk{
-    background-image: url("../c12.17hacka_connect_athon/images/discs/blueDisc.png");
+    background-image: url("images/disks/redDisk.png");
     background-size: cover;
     display: inline-block;
     position: relative;
