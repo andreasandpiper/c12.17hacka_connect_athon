@@ -28,7 +28,13 @@ function initializeApp(){
   newGame.columnClicked();
   newGame.columnClicked();
   newGame.columnClicked();
+  newGame.columnClicked();
+  newGame.columnClicked();
+  newGame.columnClicked();
   console.log(newGame.board);
+  console.log(newGame.playerOne)
+  console.log(newGame.playerTwo)
+
 }
 
 var newGame;
@@ -37,11 +43,10 @@ function beginGame(){
   //create new game
   newGame = new GameBoard();
   //fill board
-  newGame.fillBoard(4,5);
+  newGame.fillBoard(6,7);
   //get playerNames
   newGame.getPlayerNames();
-  newGame.createGameBoard(4,5);
-  $(".name").text("wooooo")
+  newGame.createGameBoard(6,7);
 }
 
 function GameBoard(){
@@ -56,16 +61,47 @@ function GameBoard(){
     name: "",
     picks: []
   };
-  this.currentPlayer = this.playerOne;
+  this.currentPlayer;
   this.createGameBoard = function(width, height){
     for(var row = 0 ; row < height ; row++ ){
       for(var col = 0 ; col < width; col++){
         var square = $('<div>').addClass("square col" +col + " row" + row).attr("draggable", false);
-        console.log(square)
         $(".game_board").append(square);
       }
     }
   }
+}
+
+GameBoard.prototype.checkIfWinner = function(array){
+  //sort array so smallest col begins
+  array = array.sort();
+  console.log(array);
+  //keep track of how many matched in a row
+  var horizontalMatchCount = 0;
+  var verticalMatchCount=0;
+  var previousValue = array[0];
+  for(var chipIndex = 1 ; chipIndex < array.length; chipIndex++){
+    //vertical match
+    if(previousValue[1] === array[chipIndex][1]){
+      verticalMatchCount++
+      if(verticalMatchCount === 4){
+        console.log('winner')
+      }
+    } else {
+      verticalMatchCount = 0;
+    }
+
+    //horizontalMatchCount
+    if(previousValue[0] === array[chipIndex][0]){
+      horizontalMatchCount++
+      if(horizontalMatchCount === 4){
+        console.log('winner')
+      }
+    } else {
+      horizontalMatchCount = 0;
+    }
+  }
+
 }
 
 
@@ -93,18 +129,22 @@ GameBoard.prototype.fillBoard = function(height, width){
   }
 }
 GameBoard.prototype.chipDrop = function(column){
-  for(var i = this.board.length-1 ; i >= 0 ; i--){
-    if(!this.board[i][column].filled){
-      this.board[i][column].filled = true;
-      this.board[i][column].player = this.currentPlayer.name;
+  for(var row = this.board.length-1 ; row >= 0 ; row--){
+    if(!this.board[row][column].filled){
+      this.board[row][column].filled = true;
+      this.board[row][column].player = this.currentPlayer.name;
       this.pickedColumn = false; //allows the next player to now click a column
-
+      var positionInMatrix = row + "," + column;
       //alternates players
-      if(this.currentPlayer = this.playerOne){
-        this.currentPlayer = this.playerTwo;
-      } else {
-        this.currentPlayer = this.playerOne;
-      }
+      // if(this.currentPlayer === this.playerOne){
+        this.currentPlayer.picks.push(positionInMatrix);
+        this.checkIfWinner(this.currentPlayer.picks);
+        // this.currentPlayer = this.playerTwo;
+      // } else {
+      //   this.currentPlayer.picks.push(positionInMatrix);
+      //   this.checkIfWinner(this.currentPlayer.picks);
+      //   this.currentPlayer = this.playerOne;
+      // }
       return;
     }
   }

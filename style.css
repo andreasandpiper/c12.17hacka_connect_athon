@@ -56,8 +56,8 @@ header{
     width: 13.8%;
     height: 13.8%;
     background-color: #2a282b;
-
-
+    border: 2px solid red;
+}
 /************************************************
 ** Animates the Disc Dropping To Specific Rows **
 ********** Specific Heights Will Change *********
