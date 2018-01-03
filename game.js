@@ -21,13 +21,14 @@
 $(document).ready(initializeApp);
 
 function initializeApp(){
+    beginGame();
   //add click events
+    $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
   //function for clickedColumn = newGame.columnClicked.bind(newGame)
 
-  beginGame();
-  newGame.columnClicked();
-  newGame.columnClicked();
-  newGame.columnClicked();
+  // newGame.columnClicked();
+  // newGame.columnClicked();
+  // newGame.columnClicked();
   console.log(newGame.board);
 }
 
@@ -37,11 +38,10 @@ function beginGame(){
   //create new game
   newGame = new GameBoard();
   //fill board
-  newGame.fillBoard(4,5);
+  newGame.fillBoard(7,6);
   //get playerNames
   newGame.getPlayerNames();
-  newGame.createGameBoard(4,5);
-  $(".name").text("wooooo")
+  newGame.createGameBoard(7,6);
 }
 
 function GameBoard(){
@@ -61,7 +61,6 @@ function GameBoard(){
     for(var row = 0 ; row < height ; row++ ){
       for(var col = 0 ; col < width; col++){
         var square = $('<div>').addClass("square col" +col + " row" + row).attr("draggable", false);
-        console.log(square)
         $(".game_board").append(square);
       }
     }
@@ -69,17 +68,18 @@ function GameBoard(){
 }
 
 
-GameBoard.prototype.columnClicked = function(){
+GameBoard.prototype.columnClicked = function(event){
   //check to make sure only one animation at a time
   if(this.pickedColumn || this.gameOver){
     return
   }
   this.pickedColumn = true;
   //get which column was clicked from the class
-  // var targetColumn = $(event.target).attr('class');
-  var targetColumn = 2;
+  var targetColumn = $(event.target).attr("class").split(" ")[1];
+  var column = targetColumn[targetColumn.length - 1];
+  console.log(column)
   //drop the chip
-  this.chipDrop(targetColumn);
+  this.chipDrop(column);
 }
 
 GameBoard.prototype.fillBoard = function(height, width){
@@ -116,6 +116,6 @@ GameBoard.prototype.getPlayerNames = function(){
 }
 
 function Chip(filled, player){
-  this.filled = filled,
+  this.filled = filled;
   this.player = player
 }
