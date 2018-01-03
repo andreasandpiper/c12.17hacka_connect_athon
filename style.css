@@ -41,7 +41,7 @@ header{
     background-color: #1b6d85;
 }
 
-.game-board{
+.game_board{
     position: absolute;
     display: flex;
     flex-flow: row wrap;
