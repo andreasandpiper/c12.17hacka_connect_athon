@@ -26,10 +26,8 @@ function initializeApp(){
     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
   //function for clickedColumn = newGame.columnClicked.bind(newGame)
 
-  // newGame.columnClicked();
-  // newGame.columnClicked();
-  // newGame.columnClicked();
-  console.log(newGame.board);
+  beginGame();
+  diskDropInit();
 }
 
 var newGame;
@@ -130,31 +128,34 @@ console.log(newGame.board);
 /************************************************
  ********* Disc Cursor Above Game Board *********
  ***********************************************/
+function diskDropInit(){
 
-var discColumn = {
-    col0: function(){
-        $(".preDropDisc.col0").addClass('')
-    },
-    col1: function(){
+    $(".preDropDisk").css("visibility", "hidden");
 
-    },
-    col2: function(){
-
-    },
-    col3: function(){
-
-    },
-    col4: function(){
-
-    },
-    col5: function(){
-
-    },
-    col6: function(){
-
+    function showDisk(disk){
+        disk.addClass('animated fadeIn');
+        disk.css("visibility", "visible");
     }
-};
 
-$.each(discColumn, function(key, fn){
-    $('.square.' + key).mouseover(fn);
-});
+    function hideDisk(disk){
+        setTimeout(function(){
+            disk.removeClass('animated fadeIn');
+        },1);
+        disk.addClass('animated fadeOut');
+        setTimeout(function(){
+            disk.css("visibility", "hidden");
+            disk.removeClass('animated fadeOut');
+        },1);
+    }
+
+    $(".game_board")
+        .on('mouseenter', ".square", function(){
+            var column = $(this).attr("class").split(" ")[1];
+            showDisk($(".preDropDisk." + column));
+        })
+        .on('mouseleave', ".square", function(){
+            var column = $(this).attr("class").split(" ")[1];
+            hideDisk($(".preDropDisk." + column));
+        });
+}
+
