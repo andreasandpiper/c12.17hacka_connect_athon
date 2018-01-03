@@ -18,11 +18,17 @@
 
 
 
-// $(document).ready(initializeApp);
+$(document).ready(initializeApp);
 
 function initializeApp(){
   //add click events
   //function for clickedColumn = newGame.columnClicked.bind(newGame)
+
+  beginGame();
+  newGame.columnClicked();
+  newGame.columnClicked();
+  newGame.columnClicked();
+  console.log(newGame.board);
 }
 
 var newGame;
@@ -31,20 +37,35 @@ function beginGame(){
   //create new game
   newGame = new GameBoard();
   //fill board
-  newGame.fillBoard(6,7);
+  newGame.fillBoard(4,5);
   //get playerNames
   newGame.getPlayerNames();
+  newGame.createGameBoard(4,5);
+  $(".name").text("wooooo")
 }
 
 function GameBoard(){
   this.gameOver = false;
   this.pickedColumn = false;
   this.board = [];
-  this.playerOne;
-  this.playerTwo;
-  this.currentPlayer;
-  this.playerOnePicks = [];
-  this.playerTwoPicks = [];
+  this.playerOne = {
+    name: "",
+    picks: []
+  };
+  this.playerTwo =  {
+    name: "",
+    picks: []
+  };
+  this.currentPlayer = this.playerOne;
+  this.createGameBoard = function(width, height){
+    for(var row = 0 ; row < height ; row++ ){
+      for(var col = 0 ; col < width; col++){
+        var square = $('<div>').addClass("square col" +col + " row" + row).attr("draggable", false);
+        console.log(square)
+        $(".game_board").append(square);
+      }
+    }
+  }
 }
 
 
@@ -75,15 +96,22 @@ GameBoard.prototype.chipDrop = function(column){
   for(var i = this.board.length-1 ; i >= 0 ; i--){
     if(!this.board[i][column].filled){
       this.board[i][column].filled = true;
-      this.board[i][column].player = this.currentPlayer;
-      this.pickedColumn = false; //when
+      this.board[i][column].player = this.currentPlayer.name;
+      this.pickedColumn = false; //allows the next player to now click a column
+
+      //alternates players
+      if(this.currentPlayer = this.playerOne){
+        this.currentPlayer = this.playerTwo;
+      } else {
+        this.currentPlayer = this.playerOne;
+      }
       return;
     }
   }
 }
 GameBoard.prototype.getPlayerNames = function(){
-  this.playerOne = "bob";
-  this.playerOne = "al";
+  this.playerOne.name = "bob";
+  this.playerTwo.name = "al";
   this.currentPlayer = this.playerOne;
 }
 
@@ -91,7 +119,3 @@ function Chip(filled, player){
   this.filled = filled,
   this.player = player
 }
-
-beginGame();
-newGame.columnClicked();
-console.log(newGame.board);
