@@ -21,15 +21,13 @@
 $(document).ready(initializeApp);
 
 function initializeApp(){
+    beginGame();
   //add click events
+    $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
   //function for clickedColumn = newGame.columnClicked.bind(newGame)
 
   beginGame();
   diskDropInit();
-
-  newGame.columnClicked();
-  newGame.columnClicked();
-  newGame.columnClicked();
 }
 
 var newGame;
@@ -42,7 +40,6 @@ function beginGame(){
   //get playerNames
   newGame.getPlayerNames();
   newGame.createGameBoard(7,6);
-  $(".name").text("wooooo")
 }
 
 function GameBoard(){
@@ -69,18 +66,19 @@ function GameBoard(){
 }
 
 
-GameBoard.prototype.columnClicked = function(){
+GameBoard.prototype.columnClicked = function(event){
   //check to make sure only one animation at a time
   if(this.pickedColumn || this.gameOver){
     return
   }
   this.pickedColumn = true;
   //get which column was clicked from the class
-  // var targetColumn = $(event.target).attr('class');
-  var targetColumn = 2;
+  var targetColumn = $(event.target).attr("class").split(" ")[1];
+  var column = targetColumn[targetColumn.length - 1];
+  console.log(column)
   //drop the chip
-  this.chipDrop(targetColumn);
-};
+  this.chipDrop(column);
+}
 
 GameBoard.prototype.fillBoard = function(height, width){
   for(var i = 0 ; i < width ; i++){
@@ -119,8 +117,7 @@ GameBoard.prototype.getPlayerNames = function(){
 
 function Chip(filled, player){
   this.filled = filled;
-  this.player = player;
-}
+  this.player = player
 
 beginGame();
 newGame.columnClicked();
