@@ -40,7 +40,7 @@ header{
     background-color: #1b6d85;
 }
 
-.game-board{
+.game_board{
     position: absolute;
     display: flex;
     flex-flow: row wrap;
@@ -52,10 +52,12 @@ header{
 .square {
     position: relative;
     display: inline-block;
-    width: 13.8%;
-    height: 13.8%;
-    background-color: #2a282b;
+    width: 14.287%;
+    height: 16.66%;
+    box-sizing: border-box;
+    border: 1px solid yellow;
 }
+
 
 /************************************************
 ** Animates the Disc Dropping To Specific Rows **
@@ -222,4 +224,3 @@ header{
     position: relative;
 
 }
-
