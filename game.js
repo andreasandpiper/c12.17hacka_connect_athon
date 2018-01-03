@@ -25,10 +25,11 @@ function initializeApp(){
   //function for clickedColumn = newGame.columnClicked.bind(newGame)
 
   beginGame();
+  diskDropInit();
+
   newGame.columnClicked();
   newGame.columnClicked();
   newGame.columnClicked();
-  console.log(newGame.board);
 }
 
 var newGame;
@@ -37,10 +38,10 @@ function beginGame(){
   //create new game
   newGame = new GameBoard();
   //fill board
-  newGame.fillBoard(4,5);
+  newGame.fillBoard(7,6);
   //get playerNames
   newGame.getPlayerNames();
-  newGame.createGameBoard(4,5);
+  newGame.createGameBoard(7,6);
   $(".name").text("wooooo")
 }
 
@@ -61,7 +62,6 @@ function GameBoard(){
     for(var row = 0 ; row < height ; row++ ){
       for(var col = 0 ; col < width; col++){
         var square = $('<div>').addClass("square col" +col + " row" + row).attr("draggable", false);
-        console.log(square)
         $(".game_board").append(square);
       }
     }
@@ -131,31 +131,34 @@ console.log(newGame.board);
 /************************************************
  ********* Disc Cursor Above Game Board *********
  ***********************************************/
+function diskDropInit(){
 
-var discColumn = {
-    col0: function(){
-        $(".preDropDisc.col0").addClass('')
-    },
-    col1: function(){
+    $(".preDropDisk").css("visibility", "hidden");
 
-    },
-    col2: function(){
-
-    },
-    col3: function(){
-
-    },
-    col4: function(){
-
-    },
-    col5: function(){
-
-    },
-    col6: function(){
-
+    function showDisk(disk){
+        disk.addClass('animated fadeIn');
+        disk.css("visibility", "visible");
     }
-};
 
-$.each(discColumn, function(key, fn){
-    $('.square.' + key).mouseover(fn);
-});
+    function hideDisk(disk){
+        setTimeout(function(){
+            disk.removeClass('animated fadeIn');
+        },1);
+        disk.addClass('animated fadeOut');
+        setTimeout(function(){
+            disk.css("visibility", "hidden");
+            disk.removeClass('animated fadeOut');
+        },1);
+    }
+
+    $(".game_board")
+        .on('mouseenter', ".square", function(){
+            var column = $(this).attr("class").split(" ")[1];
+            showDisk($(".preDropDisk." + column));
+        })
+        .on('mouseleave', ".square", function(){
+            var column = $(this).attr("class").split(" ")[1];
+            hideDisk($(".preDropDisk." + column));
+        });
+}
+

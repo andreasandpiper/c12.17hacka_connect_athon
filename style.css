@@ -182,6 +182,10 @@ header{
 /************************************************
  ********* Disc Cursor Above Game Board *********
  ***********************************************/
+.animated {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
 
 @keyframes fadeIn {
     from {
@@ -211,16 +215,25 @@ header{
     animation-name: fadeOut;
 }
 
+.visibility{
 
-#pre_drop_disc_box{
-    position: absolute;
-    top: 5vh;
-    left: 10vw;
 }
 
-.preDropDisc{
+#pre_drop_disk_box{
+    position: absolute;
+    top: -10vh;
+    left: 5vw;
+    width: 90%;
+    height: 13vh;
+}
 
+.preDropDisk{
+    background-image: url("../c12.17hacka_connect_athon/images/discs/blueDisc.png");
+    background-size: cover;
     display: inline-block;
     position: relative;
-
+    width: 13.5%;
+    height: 100%;
+    margin: 0 0 0 .35vw;
+    z-index: 1000;
 }
