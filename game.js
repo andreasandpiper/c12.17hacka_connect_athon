@@ -25,8 +25,6 @@ function initializeApp(){
   //add click events
     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
   //function for clickedColumn = newGame.columnClicked.bind(newGame)
-
-  beginGame();
   diskDropInit();
 }
 
@@ -54,7 +52,7 @@ function GameBoard(){
     name: "",
     picks: []
   };
-  this.currentPlayer = this.playerOne;
+  this.currentPlayer;
   this.createGameBoard = function(width, height){
     for(var row = 0 ; row < height ; row++ ){
       for(var col = 0 ; col < width; col++){
@@ -75,7 +73,6 @@ GameBoard.prototype.columnClicked = function(event){
   //get which column was clicked from the class
   var targetColumn = $(event.target).attr("class").split(" ")[1];
   var column = targetColumn[targetColumn.length - 1];
-  console.log(column)
   //drop the chip
   this.chipDrop(column);
 }
@@ -92,22 +89,57 @@ GameBoard.prototype.fillBoard = function(height, width){
 };
 
 GameBoard.prototype.chipDrop = function(column){
-  for(var i = this.board.length-1 ; i >= 0 ; i--){
-    if(!this.board[i][column].filled){
-      this.board[i][column].filled = true;
-      this.board[i][column].player = this.currentPlayer.name;
+  for(var row = this.board.length-1 ; row >= 0 ; row--){
+    if(!this.board[row][column].filled){
+      this.board[row][column].filled = true;
+      this.board[row][column].player = this.currentPlayer.name;
       this.pickedColumn = false; //allows the next player to now click a column
-
+      var position = row + " " + column;
       //alternates players
-      if(this.currentPlayer = this.playerOne){
+      if(this.currentPlayer === this.playerOne){
+        this.currentPlayer.picks.push(position)
+        this.checkIfWinner(this.currentPlayer.picks)
         this.currentPlayer = this.playerTwo;
       } else {
+        this.currentPlayer.picks.push(position)
+        this.checkIfWinner(this.currentPlayer.picks)
         this.currentPlayer = this.playerOne;
       }
       return;
     }
   }
 };
+
+GameBoard.prototype.checkIfWinner = function(array){
+  var horizontalMatchCounter = 0;
+  var verticalMatchCounter = 0;
+  var previousValue = array[0];
+  for(var chipIndex = 0 ; chipIndex < array.length; chipIndex++){
+    //horizontal
+    if(previousValue[0] === array[chipIndex][0]){
+      horizontalMatchCounter++;
+      if(horizontalMatchCounter === 4){
+        console.log('winner!')
+        this.gameOver = true;
+      }
+    } else {
+      horizontalMatchCounter = 0;
+    }
+
+    //vertical match
+    if(previousValue[1] === array[chipIndex][1]){
+      verticalMatchCounter++;
+      if(verticalMatchCounter === 4){
+        console.log('winner!')
+        this.gameOver = true;
+      }
+    } else {
+      verticalMatchCounter = 0;
+    }
+
+    previousValue = array[chipIndex];
+  }
+}
 
 GameBoard.prototype.getPlayerNames = function(){
   this.playerOne.name = "bob";
@@ -118,12 +150,7 @@ GameBoard.prototype.getPlayerNames = function(){
 function Chip(filled, player){
   this.filled = filled;
   this.player = player
-
-beginGame();
-newGame.columnClicked();
-console.log(newGame.board);
-
-
+}
 
 /************************************************
  ********* Disc Cursor Above Game Board *********
@@ -158,4 +185,3 @@ function diskDropInit(){
             hideDisk($(".preDropDisk." + column));
         });
 }
-
