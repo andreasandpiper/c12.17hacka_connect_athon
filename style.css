@@ -1,4 +1,63 @@
 
+*{
+    margin: 0;
+}
+
+body{
+    width: 100vw;
+    height: 100vh;
+    background-color: #409df3;
+}
+
+header{
+    position: relative;
+    width: 90%;
+    height: 10vh;
+}
+
+#page_content{
+    position: relative;
+    overflow: hidden;
+    display: block;
+}
+
+#main{
+    position: relative;
+    margin: auto;
+    display: flex;
+    max-width: 1180px;
+    max-height: 80%;
+}
+
+#left_margin,
+#right_margin{
+    width: 5%;
+}
+
+.aspect_ratio{
+    position: relative;
+    width: 90%;
+    padding-bottom: 77%;
+    background-color: #1b6d85;
+}
+
+.game-board{
+    position: absolute;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-content: center;
+    top: 0; left: 0; right: 0; bottom: 0;
+}
+
+.square{
+    position: relative;
+    display: inline-block;
+    width: 13.8%;
+    height: 13.8%;
+    background-color: #2a282b;
+
+
 /************************************************
 ** Animates the Disc Dropping To Specific Rows **
 ********** Specific Heights Will Change *********
