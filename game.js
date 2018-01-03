@@ -91,7 +91,8 @@ GameBoard.prototype.fillBoard = function(height, width){
     }
     this.board.push(row);
   }
-}
+};
+
 GameBoard.prototype.chipDrop = function(column){
   for(var i = this.board.length-1 ; i >= 0 ; i--){
     if(!this.board[i][column].filled){
@@ -108,14 +109,52 @@ GameBoard.prototype.chipDrop = function(column){
       return;
     }
   }
-}
+};
+
 GameBoard.prototype.getPlayerNames = function(){
   this.playerOne.name = "bob";
   this.playerTwo.name = "al";
   this.currentPlayer = this.playerOne;
-}
+};
 
 function Chip(filled, player){
   this.filled = filled;
   this.player = player
-}
+
+beginGame();
+newGame.columnClicked();
+console.log(newGame.board);
+
+
+
+/************************************************
+ ********* Disc Cursor Above Game Board *********
+ ***********************************************/
+
+var discColumn = {
+    col0: function(){
+        $(".preDropDisc.col0").addClass('')
+    },
+    col1: function(){
+
+    },
+    col2: function(){
+
+    },
+    col3: function(){
+
+    },
+    col4: function(){
+
+    },
+    col5: function(){
+
+    },
+    col6: function(){
+
+    }
+};
+
+$.each(discColumn, function(key, fn){
+    $('.square.' + key).mouseover(fn);
+});
