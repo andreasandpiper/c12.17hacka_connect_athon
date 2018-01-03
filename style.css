@@ -1,4 +1,3 @@
-
 *{
     margin: 0;
 }
@@ -50,13 +49,13 @@ header{
     top: 0; left: 0; right: 0; bottom: 0;
 }
 
-.square{
+.square {
     position: relative;
     display: inline-block;
     width: 13.8%;
     height: 13.8%;
     background-color: #2a282b;
-
+}
 
 /************************************************
 ** Animates the Disc Dropping To Specific Rows **
@@ -177,3 +176,50 @@ header{
 .fallToRow6{
     animation-fill-mode: both;
 }
+
+/************************************************
+ ********* Disc Cursor Above Game Board *********
+ ***********************************************/
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.fadeIn {
+    animation-name: fadeIn;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.fadeOut {
+    animation-name: fadeOut;
+}
+
+
+#pre_drop_disc_box{
+    position: absolute;
+    top: 5vh;
+    left: 10vw;
+}
+
+.preDropDisc{
+
+    display: inline-block;
+    position: relative;
+
+}
+
