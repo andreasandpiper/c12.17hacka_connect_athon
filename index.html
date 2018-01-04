@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
     <script src="game.js"></script>
 </head>
 <body>
@@ -13,20 +14,20 @@
     </header>
     <div id="main">
         <div id="left_margin"></div>
-        <div id="pre_drop_disk_box">
-            <div class="preDropDisk col0"></div>
-            <div class="preDropDisk col1"></div>
-            <div class="preDropDisk col2"></div>
-            <div class="preDropDisk col3"></div>
-            <div class="preDropDisk col4"></div>
-            <div class="preDropDisk col5"></div>
-            <div class="preDropDisk col6"></div>
-        </div>
+
         <div class="aspect_ratio">
+            <div id="pre_drop_disk_box">
+                <div class="preDropDisk"></div>
+            </div>
             <div class="game_board"></div>
         </div>
-        <div id="right_margin"></div>
     </div>
+    <div id="right_margin"></div>
+    <footer>
+        <div id="player1"></div>
+        <button type="button" id="rules_button">RULES</button>
+        <div id="player2"></div>
+    </footer>
 </div>
 </body>
 </html>
