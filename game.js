@@ -4,6 +4,7 @@ function initializeApp() {
     beginGame();
     //add click events
     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
+    $('.reset').on('click', beginGame);
     //function for clickedColumn = newGame.columnClicked.bind(newGame)
     diskDropInit();
 }
@@ -11,6 +12,7 @@ function initializeApp() {
 var newGame;
 
 function beginGame() {
+  $(".game_board").empty();
     //create new game
     newGame = new GameBoard();
     //fill board
@@ -78,7 +80,6 @@ GameBoard.prototype.chipDrop = function (column) {
         if (!this.board[row][column].filled) {
             this.board[row][column].filled = true;
             this.board[row][column].player = this.currentPlayer.name;
-            this.pickedColumn = false; //allows the next player to now click a column
             var vertPosition = column+row;
             var horizPosition = row+column;
             this.showChip(column, row);
@@ -91,6 +92,7 @@ GameBoard.prototype.chipDrop = function (column) {
                 this.currentPlayer = this.playerOne;
             }
             this.changeColor();
+            this.pickedColumn = false; //allows the next player to now click a column
             return;
         }
     }
@@ -103,15 +105,14 @@ GameBoard.prototype.CheckIfWinner = function(vertPosition, horizPosition){
   this.checkIfXYWinner(this.currentPlayer.verticalPicks);
   this.checkIfDiagonalWinner(this.currentPlayer.horizontalPicks.sort(), "+");//decreasing matches
   this.checkIfDiagonalWinner(this.currentPlayer.horizontalPicks.sort().reverse(), "-");//increasing matches
-  var newChip = new Chip(false, null);
-
-  var entireGameBoardFilled = this.board[0].every(gameBoardFilled);
+  var entireGameBoardFilled = this.board[0].every(this.gameBoardFilled);
   if(entireGameBoardFilled){
     console.log('cats game');
+    this.gameOver = true;
   }
 }
 
-function gameBoardFilled(chip) {
+GameBoard.prototype.gameBoardFilled = function(chip) {
   return chip.filled === true;
 }
 
