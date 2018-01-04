@@ -16,8 +16,9 @@ header{
 
 #page_content{
     position: relative;
-    overflow: hidden;
+    /*overflow: hidden;*/
     display: block;
+    top: -5vh;
 }
 
 #main{
@@ -47,13 +48,9 @@ header{
     justify-content: center;
     align-content: center;
     top: 0; left: 0; right: 0; bottom: 0;
-    -webkit-box-shadow: 0px 0px 14px 3px rgba(255,255,255,1);
-    -moz-box-shadow: 0px 0px 14px 3px rgba(255,255,255,1);
-    box-shadow: 0px 0px 14px 3px rgba(255,255,255,1);
+    border: 1px white solid;
     z-index: 5;
-    -webkit-box-shadow: inset 0px 0px 14px 3px rgba(255,255,255,1);
-    -moz-box-shadow: inset 0px 0px 14px 3px rgba(255,255,255,1);
-    box-shadow: inset 0px 0px 14px 3px rgba(255,255,255,1);
+
 }
 
 .square {
@@ -62,23 +59,114 @@ header{
     width: 14.285%;
     height: 16.66%;
     box-sizing: border-box;
-    border: 1px solid white;
-    -webkit-box-shadow: 0px 0px 14px 3px rgba(255,255,255,1);
-    -moz-box-shadow: 0px 0px 14px 3px rgba(255,255,255,1);
-    box-shadow: 0px 0px 14px 3px rgba(255,255,255,1);
     z-index: 2;
-    -webkit-box-shadow: inset 0px 0px 14px 3px rgba(255,255,255,1);
-    -moz-box-shadow: inset 0px 0px 14px 3px rgba(255,255,255,1);
-    box-shadow: inset 0px 0px 14px 3px rgba(255,255,255,1);
+
 }
 
+footer{
+    height: 20%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    letter-spacing: 15px;
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bolder;
+}
+
+#player1,
+#player2{
+    margin: 0 0 0 15px;
+    font-size: 40px;
+    padding: 10px 40px;
+    color:#fff;
+    text-align:center;
+}
+
+#rules_button{
+    height:5vh;
+    padding: 0 0 0 15px;
+    width:10%;
+    letter-spacing: 15px;
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bolder;
+}
+
+.neonText-blue{
+    font-size:100px;
+    padding:20px;
+    color:#fff;
+    text-align:center;
+    text-shadow:
+            0 0 5px #0062FF,
+            0 0 10px #0062FF,
+            0 0 15px #0062FF,
+            0 0 20px #0062FF,
+            0 0 25px #0062FF,
+            0 0 30px #0062FF
+;
+}
+.neonText-green{
+    font-size:100px;
+    padding:20px;
+    color:#fff;
+    text-align:center;
+    text-shadow:
+            0 0 5px #00ff66,
+            0 0 10px #00ff66,
+            0 0 15px #00ff66,
+            0 0 20px #00ff66,
+            0 0 25px #00ff66,
+            0 0 30px #00ff66
+;
+}
+.neonText-purple{
+    font-size:100px;
+    padding:20px;
+    color:#fff;
+    text-align:center;
+    text-shadow:
+            0 0 5px #9D00FF,
+            0 0 10px #9D00FF,
+            0 0 15px #9D00FF,
+            0 0 20px #9D00FF,
+            0 0 25px #9D00FF,
+            0 0 30px #9D00FF
+;
+}
+.neonText-red{
+    font-size:100px;
+    padding:20px;
+    color:#fff;
+    text-align:center;
+    text-shadow:
+            0 0 5px #FF0000,
+            0 0 10px #FF0000,
+            0 0 15px #FF0000,
+            0 0 20px #FF0000,
+            0 0 25px #FF0000,
+            0 0 30px #FF0000
+;
+}
+.neonText-yellow{
+    font-size:100px;
+    padding:20px;
+    color:#fff;
+    text-align:center;
+    text-shadow:
+            0 0 5px #FFFF33,
+            0 0 10px #FFFF33,
+            0 0 15px #FFFF33,
+            0 0 20px #FFFF33,
+            0 0 25px #FFFF33,
+            0 0 30px #FFFF33;
+}
 /***************************************************
 Modal styling
 ****************************************************/
 .modal-title{
     text-align: center;
 }
-
 /************************************************
 ** Animates the Disc Dropping To Specific Rows **
 ********** Specific Heights Will Change *********
@@ -235,26 +323,20 @@ Modal styling
     animation-name: fadeOut;
 }
 
-.visibility{
-
-}
 
 #pre_drop_disk_box{
     position: absolute;
-    top: -10vh;
-    left: 5vw;
-    width: 90%;
+    top: -9.5vh;
+    width: 100%;
     height: 13vh;
     z-index: 1;
 }
 
-.preDropDisk{
-    background-image: url("images/disks/redDisk.png");
+.preDropDisk {
     background-size: cover;
-    display: inline-block;
-    position: relative;
-    width: 13.5%;
+    position: absolute;
+    width: 14%;
     height: 100%;
-    margin: 0 0 0 .35vw;
     z-index: 1;
 }
+

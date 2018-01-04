@@ -47,12 +47,12 @@ function GameBoard() {
     this.playerOne = {
         name: "",
         picks: [],
-        playerColor: 'blue'
+        playerColor: 'purple'
     };
     this.playerTwo = {
         name: "",
         picks: [],
-        playerColor: 'red'
+        playerColor: 'blue'
     };
     this.currentPlayer = this.playerOne;
     this.createGameBoard = function (width, height) {
@@ -100,14 +100,15 @@ GameBoard.prototype.chipDrop = function (column) {
             this.showChip(column, row);
             //alternates players
             if (this.currentPlayer === this.playerOne) {
-                this.currentPlayer.picks.push(position)
-                this.checkIfWinner(this.currentPlayer.picks)
+                this.currentPlayer.picks.push(position);
+                this.checkIfWinner(this.currentPlayer.picks);
                 this.currentPlayer = this.playerTwo;
             } else {
-                this.currentPlayer.picks.push(position)
-                this.checkIfWinner(this.currentPlayer.picks)
+                this.currentPlayer.picks.push(position);
+                this.checkIfWinner(this.currentPlayer.picks);
                 this.currentPlayer = this.playerOne;
             }
+            this.changeColor();
             return;
         }
     }
@@ -119,14 +120,43 @@ GameBoard.prototype.showChip = function (column, row) {
     $gameSquare.css({
         "background-image": "url('../c12.17hacka_connect_athon/images/disks/" + this.currentPlayer.playerColor + "Disk.png')",
         "background-size": "contain"
-    })
-        .addClass("fallToRow" + row);
+    });
+    $gameSquare.addClass("fallToRow" + row);
+    this.changeColor();
 };
 
 GameBoard.prototype.getPlayerNames = function () {
-    this.playerOne.name = "bob";
-    this.playerTwo.name = "al";
+    this.playerOne.name = "BRUTUS";
+    this.playerTwo.name = "CEASAR";
     this.currentPlayer = this.playerOne;
+
+    $('#player1').text(this.playerOne.name).addClass('neonText-'+this.playerOne.playerColor);
+    $('#player2').text(this.playerTwo.name);
+};
+
+GameBoard.prototype.changeColor = function(){
+
+    if(this.currentPlayer === this.playerOne){
+        $('#player1').addClass('neonText-'+this.playerOne.playerColor);
+        $('#player2').removeClass('neonText-'+this.playerTwo.playerColor);
+    } else {
+        $('#player2').addClass('neonText-'+this.playerTwo.playerColor);
+        $('#player1').removeClass('neonText-'+this.playerOne.playerColor);
+    }
+
+    var $disk = $(".preDropDisk");
+
+    setTimeout(function () {
+        $disk.addClass('animated fadeOut');
+    }, 1000);
+    $disk.removeClass('animated fadeIn');
+    setTimeout(function () {
+        $disk.removeClass('animated fadeOut');
+        setTimeout(function () {
+            $disk.css("background-image", "url('images/disks/"+ newGame.currentPlayer.playerColor + "Disk.png')");
+            $disk.removeClass('animated fadeIn');
+        }, 1);
+    }, 1000);
 };
 
 GameBoard.prototype.checkIfWinner = function (array) {
@@ -150,13 +180,12 @@ GameBoard.prototype.checkIfWinner = function (array) {
         if (previousValue[1] === array[chipIndex][1]) {
             verticalMatchCounter++;
             if (verticalMatchCounter === 4) {
-                console.log('winner!')
+                console.log('winner!');
                 this.gameOver = true;
             }
         } else {
             verticalMatchCounter = 0;
         }
-
         previousValue = array[chipIndex];
     }
 };
@@ -171,38 +200,19 @@ function Chip(filled, player) {
  ***********************************************/
 
 function diskDropInit() {
+    var $disk = $(".preDropDisk");
 
-    $(".preDropDisk").css("visibility", "hidden");
-
-    function showDisk(disk) {
-        disk.addClass('animated fadeIn');
-        disk.css({
-            "visibility": "visible",
-            "background-image": "url('images/disks/redDisk.png')",
-            "background-size": "cover"
+    $(document).on('mousemove', function(e){
+        $disk.css({
+            left:  e.pageX - 575,
+            top:   15
         });
-    }
-
-    function hideDisk(disk) {
-        setTimeout(function () {
-            disk.removeClass('animated fadeIn');
-        }, 1);
-        disk.addClass('animated fadeOut');
-        setTimeout(function () {
-            disk.css("visibility", "hidden");
-            disk.removeClass('animated fadeOut');
-        }, 1);
-    }
-
-    $(".game_board")
-        .on('mouseenter', ".square", function () {
-            var column = $(this).attr("class").split(" ")[1];
-            showDisk($(".preDropDisk." + column));
-        })
-        .on('mouseleave', ".square", function () {
-            var column = $(this).attr("class").split(" ")[1];
-            hideDisk($(".preDropDisk." + column));
-        });
+    });
+     $disk.addClass('animated fadeIn');
+     $disk.css({
+        "background-image": "url('images/disks/"+ newGame.currentPlayer.playerColor + "Disk.png')",
+        "background-size": "cover"
+    });
 }
 
 
