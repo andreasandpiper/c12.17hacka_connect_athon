@@ -1,22 +1,3 @@
-//GAME LOGIC
-//begin game by clicking button
-//button creates instance of constructor GameBoard and stores as newGame,
-//call fillBoard
-//player one inputs name,
-//by clicking submit, it calls the function to get name and store as variable
-//repeat for player two
-//game begins with current player as player one
-//when a column is clicked
-//set variable pickedColumn to true to allow all logic and animation to complete before other player can choose
-//call chipDrop to fill in gameboard
-//if chip unable to occupy spot, gameOver
-//call function to check if win;
-//if win is true
-//stop game (gameOver = true)
-//else
-// change currentPlayer (currentPlayer = !currentPlayer)
-
-
 $(document).ready(initializeApp);
 
 function initializeApp() {
@@ -104,21 +85,10 @@ GameBoard.prototype.chipDrop = function (column) {
             this.showChip(column, row);
             //alternates players
             if (this.currentPlayer === this.playerOne) {
-                this.currentPlayer.verticalPicks.push(vertPosition)
-                this.currentPlayer.horizontalPicks.push(horizPosition)
-                this.checkIfWinner(this.currentPlayer.horizontalPicks);
-                this.checkIfWinner(this.currentPlayer.verticalPicks);
-                this.checkIfDecreaseDiagonalWinner(this.currentPlayer.horizontalPicks);
-                this.checkIfIncreaseDiagonalWinner(this.currentPlayer.horizontalPicks);
-
+                this.fillMatrixWithChip(vertPosition, horizPosition);
                 this.currentPlayer = this.playerTwo;
             } else {
-                this.currentPlayer.verticalPicks.push(vertPosition)
-                this.currentPlayer.horizontalPicks.push(horizPosition)
-                this.checkIfWinner(this.currentPlayer.horizontalPicks);
-                this.checkIfWinner(this.currentPlayer.verticalPicks);
-                this.checkIfDecreaseDiagonalWinner(this.currentPlayer.horizontalPicks);
-                this.checkIfIncreaseDiagonalWinner(this.currentPlayer.horizontalPicks);
+                this.fillMatrixWithChip(vertPosition, horizPosition);
                 this.currentPlayer = this.playerOne;
             }
             this.changeColor();
@@ -126,6 +96,16 @@ GameBoard.prototype.chipDrop = function (column) {
         }
     }
 };
+
+GameBoard.prototype.fillMatrixWithChip = function(vertPosition, horizPosition){
+  this.currentPlayer.verticalPicks.push(vertPosition)
+  this.currentPlayer.horizontalPicks.push(horizPosition)
+  this.checkIfWinner(this.currentPlayer.horizontalPicks);
+  this.checkIfWinner(this.currentPlayer.verticalPicks);
+  this.checkIfDiagonalWinner(this.currentPlayer.horizontalPicks.sort(), "+");//decreasing matches
+  this.checkIfDiagonalWinner(this.currentPlayer.horizontalPicks.sort().reverse(), "-");//increasing matches
+
+}
 
 GameBoard.prototype.showChip = function (column, row) {
     $gameSquare = $('.square.col' + column + '.row' + row);
@@ -196,45 +176,32 @@ GameBoard.prototype.checkIfWinner = function (array) {
 
 };
 
-GameBoard.prototype.checkIfDecreaseDiagonalWinner = function (array){
-  array = array.sort();
-  var diagonalMatchCounter = 1;
-  for(var chipIndex = 0 ; chipIndex < array.length ; chipIndex++){
-    var currentChipRow = parseInt(array[chipIndex][0]);
-    var currentChipCol = parseInt(array[chipIndex][1]);
-    for(var compareChip = chipIndex ; compareChip< array.length ; compareChip++){
-      var lookForChip = (currentChipRow+1).toString() + (currentChipCol+1).toString();
-      if(array.indexOf(lookForChip) !== -1){
-        diagonalMatchCounter++;
-        currentChipRow++;
-        currentChipCol++;
-        if(diagonalMatchCounter === 4){
-          console.log('winner!')
-          victoryModal();
-          this.gameOver = true;
-        }
-      } else {
-        diagonalMatchCounter = 1;
-        break;
-      }
+function incrementOrDecrement(currentValue, upOrDown){
+  var types = {
+    '+': function(){
+      currentValue += 1;
+    },
+    '-': function(){
+      currentValue -= 1;
     }
   }
+  types[upOrDown]();
+  return currentValue;
 }
 
-GameBoard.prototype.checkIfIncreaseDiagonalWinner = function (array){
-  array = array.sort().reverse();
+GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown){
   var diagonalMatchCounter = 1;
   for(var chipIndex = 0 ; chipIndex < array.length ; chipIndex++){
     var currentChipRow = parseInt(array[chipIndex][0]);
     var currentChipCol = parseInt(array[chipIndex][1]);
     for(var compareChip = chipIndex ; compareChip< array.length ; compareChip++){
-      var lookForChip = (currentChipRow-1).toString() + (currentChipCol+1).toString();
+      var lookForChip = (incrementOrDecrement(currentChipRow, upOrDown)).toString() + (currentChipCol+1).toString();
       if(array.indexOf(lookForChip) !== -1){
         diagonalMatchCounter++;
-        currentChipRow--;
+        currentChipRow = incrementOrDecrement(currentChipRow, upOrDown);
         currentChipCol++;
         if(diagonalMatchCounter === 4){
-          console.log('winner!')
+          console.log('diagonal winner!')
           victoryModal();
           this.gameOver = true;
         }
@@ -244,7 +211,6 @@ GameBoard.prototype.checkIfIncreaseDiagonalWinner = function (array){
       }
     }
   }
-
 }
 
 function Chip(filled, player) {
