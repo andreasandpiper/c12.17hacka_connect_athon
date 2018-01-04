@@ -63,6 +63,8 @@ function GameBoard() {
             for (var col = 0; col < width; col++) {
                 var square = $('<div>').addClass("square col" + col + " row" + row).attr("draggable", false);
                 $(".game_board").append(square);
+                var gridSquare = $('<div>').addClass('game_grid_squares');
+                $(".game_grid").append(gridSquare);
             }
         }
     }
@@ -104,22 +106,21 @@ GameBoard.prototype.chipDrop = function (column) {
             this.showChip(column, row);
             //alternates players
             if (this.currentPlayer === this.playerOne) {
-                this.currentPlayer.verticalPicks.push(vertPosition)
-                this.currentPlayer.horizontalPicks.push(horizPosition)
+                this.currentPlayer.verticalPicks.push(vertPosition);
+                this.currentPlayer.horizontalPicks.push(horizPosition);
                 this.checkIfWinner(this.currentPlayer.horizontalPicks);
                 this.checkIfWinner(this.currentPlayer.verticalPicks);
                 this.checkIfDecreaseDiagonalWinner(this.currentPlayer.horizontalPicks);
                 this.currentPlayer = this.playerTwo;
             } else {
-                this.currentPlayer.verticalPicks.push(vertPosition)
-                this.currentPlayer.horizontalPicks.push(horizPosition)
+                this.currentPlayer.verticalPicks.push(vertPosition);
+                this.currentPlayer.horizontalPicks.push(horizPosition);
                 this.checkIfWinner(this.currentPlayer.horizontalPicks);
                 this.checkIfWinner(this.currentPlayer.verticalPicks);
                 this.checkIfDecreaseDiagonalWinner(this.currentPlayer.horizontalPicks);
 
                 this.currentPlayer = this.playerOne;
             }
-            this.changeColor();
             return;
         }
     }
@@ -156,15 +157,16 @@ GameBoard.prototype.changeColor = function(){
 
     var $disk = $(".preDropDisk");
 
-    setTimeout(function () {
-        $disk.addClass('animated fadeOut');
-    }, 1000);
-    $disk.removeClass('animated fadeIn');
+
+    $disk.addClass('animated fadeOut');
     setTimeout(function () {
         $disk.removeClass('animated fadeOut');
         setTimeout(function () {
             $disk.css("background-image", "url('images/disks/"+ newGame.currentPlayer.playerColor + "Disk.png')");
-            $disk.removeClass('animated fadeIn');
+            $disk.addClass('animated fadeIn');
+            setTimeout(function(){
+                $disk.removeClass('animated fadeIn');
+            },1000);
         }, 1);
     }, 1000);
 };
@@ -204,9 +206,6 @@ GameBoard.prototype.checkIfDecreaseDiagonalWinner = function (array){
   //add 1 to row and column
   //see if it is in array
 
-
-
-
   //for each item in array
   //check if adding one to each index value if its in array, if yes add to counter
   // for(var firstChip = 0; firstChip< array.length ; firstChip++){
@@ -228,7 +227,7 @@ GameBoard.prototype.checkIfDecreaseDiagonalWinner = function (array){
   //   }
   //
   // }
-}
+};
 
 function Chip(filled, player) {
     this.filled = filled;
@@ -244,11 +243,14 @@ function diskDropInit() {
 
     $(document).on('mousemove', function(e){
         $disk.css({
-            left:  e.pageX - 575,
-            top:   15
+            left:  e.pageX -575,
+            top:   0
         });
     });
      $disk.addClass('animated fadeIn');
+     setTimeout(function(){
+         $disk.removeClass('animated fadeIn');
+     },1000);
      $disk.css({
         "background-image": "url('images/disks/"+ newGame.currentPlayer.playerColor + "Disk.png')",
         "background-size": "cover"
@@ -259,6 +261,7 @@ function diskDropInit() {
 /******************************************************
  ************** Modal manipulation ********************
  *****************************************************/
+
 function alignModal(){
     var modalDialog = $(this).find(".modal-dialog");
     /* Applying the top margin on modal dialog to align it vertically center */
