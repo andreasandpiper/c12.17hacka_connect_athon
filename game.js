@@ -218,24 +218,26 @@ GameBoard.prototype.incrementOrDecrement = function (currentValue, upOrDown) {
 };
 
 
-GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown){
-  var diagonalMatchCounter = 1;
-  for(var chipIndex = 0 ; chipIndex < array.length ; chipIndex++){
-    var currentChipRow = parseInt(array[chipIndex][0]);
-    var currentChipCol = parseInt(array[chipIndex][1]);
-    for(var compareChip = chipIndex ; compareChip< array.length ; compareChip++){
-      var lookForChip = (this.incrementOrDecrement(currentChipRow, upOrDown)).toString() + (currentChipCol+1).toString();
-      if(array.indexOf(lookForChip) !== -1){
-        diagonalMatchCounter++;
-        currentChipRow = this.incrementOrDecrement(currentChipRow, upOrDown);
-        currentChipCol++;
-        if(diagonalMatchCounter === 4){
-          victoryModal();
-          this.gameOver = true;
-          $(".game_board").off("click", ".square", newGame.columnClicked.bind(newGame));
+GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown) {
+    var diagonalMatchCounter = 1;
+    for (var chipIndex = 0; chipIndex < array.length; chipIndex++) {
+        var currentChipRow = parseInt(array[chipIndex][0]);
+        var currentChipCol = parseInt(array[chipIndex][1]);
+        for (var compareChip = chipIndex; compareChip < array.length; compareChip++) {
+            var lookForChip = (this.incrementOrDecrement(currentChipRow, upOrDown)).toString() + (currentChipCol + 1).toString();
+            if (array.indexOf(lookForChip) !== -1) {
+                diagonalMatchCounter++;
+                currentChipRow = this.incrementOrDecrement(currentChipRow, upOrDown);
+                currentChipCol++;
+                if (diagonalMatchCounter === 4) {
+                    victoryModal();
+                    this.gameOver = true;
+                    $(".game_board").off("click", ".square", newGame.columnClicked.bind(newGame));
+                }
+            }
         }
     }
-};
+}
 
 GameBoard.prototype.showChip = function (column, row) {
     $gameSquare = $('.square.col' + column + '.row' + row);
@@ -271,8 +273,9 @@ GameBoard.prototype.changeColor = function () {
 
 };
 
-function Chip(filled) {
+function Chip(filled, player) {
     this.filled = filled;
+    this.player = player;
 }
 
 /************************************************
