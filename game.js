@@ -5,7 +5,7 @@ function initializeApp() {
     // introModal();
     //add click events
     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
-    $('.reset').on('click', beginGame);
+    $('.modal-action').on('click', beginGame);
     //function for clickedColumn = newGame.columnClicked.bind(newGame)
     diskDropInit();
 }
@@ -23,7 +23,8 @@ $('.player2_select').hide();
 var newGame;
 
 function beginGame() {
-  $(".game_board").empty();
+    $(".fade").hide();
+    $(".game_board").empty();
     //create new game
     newGame = new GameBoard();
     newGame.fillBoard(7, 6);
@@ -172,7 +173,7 @@ GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown){
         currentChipRow = this.incrementOrDecrement(currentChipRow, upOrDown);
         currentChipCol++;
         if(diagonalMatchCounter === 4){
-          //victoryModal();
+          victoryModal();
           this.gameOver = true;
         }
       } else {
@@ -265,43 +266,33 @@ function alignModal(){
 
 
 function victoryModal(){
+    $(".fade").show();
     $(".modal-dialog").css({
         "top": "25vh"
     });
     $(".modal-content").css({
-        "width": "50vw",
-        "height": "40vh",
-        // "background-color": "deeppink"
+        "width": "35vw",
+        "height": "45vh"
     });
-    $(".modal-title").text(newGame.currentPlayer.name + " wins!");
-    $(".modal-body p").text("What a battle. You should play again!");
-    $(".modal-footer button").text("New Game").css({
-
+    $(".modal-content h1").text(newGame.currentPlayer.name + " WINS!")
+        .addClass('neonText-'+newGame.currentPlayer.playerColor).css({
+        "font-size": "3em",
+        "font-family": "'Audiowide', cursive",
+        "font-weight": "bolder",
+        "top": "20%",
+        "left": "50%",
+        "transform": "translate(-50%, -50%)"
     });
-    $("#myModal").modal({
-        show: "toggle",
-        backdrop: "static",
-        keyboard: "false"
-    });
+    $(".modal-content button").text("New Game");
 }
 
 function introModal(){
-    alignModal();
-    // $(".modal-dialog").css({
-    //     "top": "25vh"
-    // });
+    $(".fade").toggle();
     $(".modal-content").css({
         "width": "30vw",
         "height": "30vh"
     });
     $(".modal-title").text("Tetron");
     $(".modal-body p").text("The rules go here");
-    $(".modal-footer button").text("Play Game").css({
-
-    });
-    $("#myModal").modal({
-        show: "toggle",
-        backdrop: "static",
-        keyboard: "false"
-    });
+    $(".modal-content button").text("Play Game")
 }
