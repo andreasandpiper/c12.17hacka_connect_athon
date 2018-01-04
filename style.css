@@ -30,13 +30,13 @@ header{
 
 #left_margin,
 #right_margin{
-    width: 5%;
+    width: 12.5%;
 }
 
 .aspect_ratio{
     position: relative;
-    width: 90%;
-    padding-bottom: 77%;
+    width: 75%;
+    padding-bottom: 64%;
     background-color: #181818;
 }
 
@@ -72,6 +72,12 @@ header{
     box-shadow: inset 0px 0px 14px 3px rgba(255,255,255,1);
 }
 
+/***************************************************
+Modal styling
+****************************************************/
+.modal-title{
+    text-align: center;
+}
 
 /************************************************
 ** Animates the Disc Dropping To Specific Rows **
