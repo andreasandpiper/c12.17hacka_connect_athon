@@ -4,7 +4,6 @@ function initializeApp() {
     beginGame();
     // introModal();
     //add click events
-    $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
     $('.reset').on('click', beginGame);
     //function for clickedColumn = newGame.columnClicked.bind(newGame)
     diskDropInit();
@@ -23,15 +22,19 @@ $('.player2_select').hide();
 var newGame;
 
 function beginGame() {
-  $(".game_board").empty();
+    $(".game_board").empty();
+    $(".game_grid").empty();
+
     //create new game
     newGame = new GameBoard();
+    $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
     newGame.fillBoard(7, 6);
     newGame.getPlayerNames();
     newGame.createGameBoard(7, 6);
 }
 
 function GameBoard() {
+  this.id = Math.random();
     this.gameOver = false;
     this.pickedColumn = false;
     this.board = [];
@@ -136,8 +139,10 @@ GameBoard.prototype.checkIfXYWinner = function (array) {
         if (previousValue[0] === array[chipIndex][0] && (parseInt(previousValue[1]) + 1) == parseInt(currentValue[1]) ) {
             matchCounter++;
             if (matchCounter === 4) {
-                victoryModal();
-                this.gameOver = true;
+              $(".game_board").off("click", ".square", newGame.columnClicked.bind(newGame));
+              this.gameOver = true;
+
+                // victoryModal();
             }
         } else {
             matchCounter = 1;
@@ -174,6 +179,7 @@ GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown){
         if(diagonalMatchCounter === 4){
           //victoryModal();
           this.gameOver = true;
+          $(".game_board").off("click", ".square", newGame.columnClicked.bind(newGame));
         }
       } else {
         diagonalMatchCounter = 1;
@@ -210,7 +216,7 @@ GameBoard.prototype.changeColor = function(){
         $('#player1').removeClass('neonText-'+this.playerOne.playerColor);
     }
     var $disk = $(".preDropDisk");
-  
+
     $disk.addClass('animated fadeOut');
     setTimeout(function () {
         $disk.removeClass('animated fadeOut');
