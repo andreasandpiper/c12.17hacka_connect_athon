@@ -10,15 +10,23 @@ function initializeApp() {
     diskDropInit();
 }
 
+/************************************************
+ ***************** Title Screen *****************
+ ***********************************************/
+
+$('.title_page').hide();
+$('.player1_select').hide();
+$('.player2_select').hide();
+// $('#page_content').hide();
+
+
 var newGame;
 
 function beginGame() {
   $(".game_board").empty();
     //create new game
     newGame = new GameBoard();
-    //fill board
     newGame.fillBoard(7, 6);
-    //get playerNames
     newGame.getPlayerNames();
     newGame.createGameBoard(7, 6);
 }
@@ -45,6 +53,8 @@ function GameBoard() {
             for (var col = 0; col < width; col++) {
                 var square = $('<div>').addClass("square col" + col + " row" + row).attr("draggable", false);
                 $(".game_board").append(square);
+                var gridSquare = $('<div>').addClass('game_grid_squares');
+                $(".game_grid").append(gridSquare);
             }
         }
     }
@@ -200,15 +210,16 @@ GameBoard.prototype.changeColor = function(){
         $('#player1').removeClass('neonText-'+this.playerOne.playerColor);
     }
     var $disk = $(".preDropDisk");
-    setTimeout(function () {
-        $disk.addClass('animated fadeOut');
-    }, 1000);
-    $disk.removeClass('animated fadeIn');
+  
+    $disk.addClass('animated fadeOut');
     setTimeout(function () {
         $disk.removeClass('animated fadeOut');
         setTimeout(function () {
             $disk.css("background-image", "url('images/disks/"+ newGame.currentPlayer.playerColor + "Disk.png')");
-            $disk.removeClass('animated fadeIn');
+            $disk.addClass('animated fadeIn');
+            setTimeout(function(){
+                $disk.removeClass('animated fadeIn');
+            },1000);
         }, 1);
     }, 1000);
 };
@@ -227,11 +238,14 @@ function diskDropInit() {
 
     $(document).on('mousemove', function(e){
         $disk.css({
-            left:  e.pageX - 575,
-            top:   15
+            left:  e.pageX -575,
+            top:   0
         });
     });
      $disk.addClass('animated fadeIn');
+     setTimeout(function(){
+         $disk.removeClass('animated fadeIn');
+     },1000);
      $disk.css({
         "background-image": "url('images/disks/"+ newGame.currentPlayer.playerColor + "Disk.png')",
         "background-size": "cover"
@@ -242,6 +256,7 @@ function diskDropInit() {
 /******************************************************
  ************** Modal manipulation ********************
  *****************************************************/
+
 function alignModal(){
     var modalDialog = $(this).find(".modal-dialog");
     /* Applying the top margin on modal dialog to align it vertically center */
