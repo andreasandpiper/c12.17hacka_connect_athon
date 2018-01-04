@@ -224,7 +224,8 @@ footer{
     text-align:center;
 }
 
-#rules_button{
+#reset-button{
+    visibility: hidden;
     height:5vh;
     padding: 0 0 0 15px;
     width:10%;
