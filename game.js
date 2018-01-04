@@ -18,7 +18,6 @@ $('.player1_select').hide();
 $('.player2_select').hide();
 // $('#page_content').hide();
 
-
 var newGame;
 
 function beginGame() {
@@ -34,7 +33,7 @@ function beginGame() {
 }
 
 function GameBoard() {
-  this.id = Math.random();
+    this.id = Math.random();
     this.gameOver = false;
     this.pickedColumn = false;
     this.board = [];
@@ -42,14 +41,20 @@ function GameBoard() {
         name: "",
         verticalPicks: [],
         horizontalPicks: [],
-        playerColor: 'purple'
+        playerColor: 'purple',
+        tokenCount: 0
     };
     this.playerTwo = {
         name: "",
         verticalPicks: [],
         horizontalPicks: [],
-        playerColor: 'blue'
+        playerColor: 'blue',
+        tokenCount: 0
+
     };
+    this.tetrisShapes = [
+      ['+1 +0','+1 -1','+2 -1']
+    ]
     this.currentPlayer = this.playerOne;
     this.createGameBoard = function (width, height) {
         for (var row = 0; row < height; row++) {
@@ -61,6 +66,38 @@ function GameBoard() {
             }
         }
     }
+}
+
+
+
+GameBoard.prototype.checkIfTetrisMatch = function (array){
+  if(!this.tetrisShapes.length){
+    return;
+  }
+  array = array.sort();
+  // var tetrisBlocks = tetrisShapes[0][0].split(" ");
+  var match = false;
+  for(var chip=0 ; chip<array.length ; chip++){
+    var chipPosition = array[chip].split("");
+    for(var tetrisChipPos=0 ; tetrisChipPos < this.tetrisShapes[0].length ; tetrisChipPos++){
+      var block = this.tetrisShapes[0][tetrisChipPos].split(" ");
+      var row = this.incrementOrDecrement(chipPosition[0], block[0][0], block[0][1]);
+      var col = this.incrementOrDecrement(chipPosition[1], block[1][0], block[1][1]);
+      var chipToFind = row.toString()+col;
+      // console.log('array' , array, 'chiptofind: ' , chipToFind);
+      if(array.indexOf(chipToFind) === -1){
+        match = false;
+        break;
+      }
+      match = true;
+    }
+    if(match){
+      console.log("match!");
+      this.currentPlayer.tokenCount++;
+      this.tetrisShapes.shift();
+      return;
+    }
+  }
 }
 
 
@@ -97,6 +134,9 @@ GameBoard.prototype.chipDrop = function (column) {
             var vertPosition = column+row;
             var horizPosition = row+column;
             this.showChip(column, row);
+            this.currentPlayer.verticalPicks.push(vertPosition)
+            this.currentPlayer.horizontalPicks.push(horizPosition)
+            this.checkIfTetrisMatch(this.currentPlayer.verticalPicks);
             //alternates players
             if (this.currentPlayer === this.playerOne) {
                 this.CheckIfWinner(vertPosition, horizPosition);
@@ -113,8 +153,6 @@ GameBoard.prototype.chipDrop = function (column) {
 };
 
 GameBoard.prototype.CheckIfWinner = function(vertPosition, horizPosition){
-  this.currentPlayer.verticalPicks.push(vertPosition)
-  this.currentPlayer.horizontalPicks.push(horizPosition)
   this.checkIfXYWinner(this.currentPlayer.horizontalPicks);
   this.checkIfXYWinner(this.currentPlayer.verticalPicks);
   this.checkIfDiagonalWinner(this.currentPlayer.horizontalPicks.sort(), "+");//decreasing matches
@@ -152,16 +190,18 @@ GameBoard.prototype.checkIfXYWinner = function (array) {
     previousValue = array[chipIndex];
 };
 
-GameBoard.prototype.incrementOrDecrement = function(currentValue, upOrDown){
+GameBoard.prototype.incrementOrDecrement = function(currentValue, upOrDown, amount){
+  currentValue = parseInt(currentValue);
+  amount = parseInt(amount);
   var types = {
     '+': function(){
-      currentValue += 1;
+      currentValue += amount;
     },
     '-': function(){
-      currentValue -= 1;
+      currentValue -= amount;
     }
   }
-  types[upOrDown]();
+  var result = types[upOrDown]();
   return currentValue;
 }
 
@@ -171,10 +211,10 @@ GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown){
     var currentChipRow = parseInt(array[chipIndex][0]);
     var currentChipCol = parseInt(array[chipIndex][1]);
     for(var compareChip = chipIndex ; compareChip< array.length ; compareChip++){
-      var lookForChip = (this.incrementOrDecrement(currentChipRow, upOrDown)).toString() + (currentChipCol+1).toString();
+      var lookForChip = (this.incrementOrDecrement(currentChipRow, upOrDown, 1)).toString() + (currentChipCol+1).toString();
       if(array.indexOf(lookForChip) !== -1){
         diagonalMatchCounter++;
-        currentChipRow = this.incrementOrDecrement(currentChipRow, upOrDown);
+        currentChipRow = this.incrementOrDecrement(currentChipRow, upOrDown, 1);
         currentChipCol++;
         if(diagonalMatchCounter === 4){
           //victoryModal();
