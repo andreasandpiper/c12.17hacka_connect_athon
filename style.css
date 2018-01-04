@@ -159,10 +159,14 @@ footer{
             0 0 15px #FFFF33,
             0 0 20px #FFFF33,
             0 0 25px #FFFF33,
-            0 0 30px #FFFF33
-;
+            0 0 30px #FFFF33;
 }
-
+/***************************************************
+Modal styling
+****************************************************/
+.modal-title{
+    text-align: center;
+}
 /************************************************
 ** Animates the Disc Dropping To Specific Rows **
 ********** Specific Heights Will Change *********

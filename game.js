@@ -169,6 +169,7 @@ GameBoard.prototype.checkIfWinner = function (array) {
             horizontalMatchCounter++;
             if (horizontalMatchCounter === 4) {
                 console.log('winner!');
+                victoryModal();
                 this.gameOver = true;
             }
         } else {
@@ -207,13 +208,41 @@ function diskDropInit() {
             top:   15
         });
     });
-
-
-
-    $disk.addClass('animated fadeIn');
-    $disk.css({
+     $disk.addClass('animated fadeIn');
+     $disk.css({
         "background-image": "url('images/disks/"+ newGame.currentPlayer.playerColor + "Disk.png')",
         "background-size": "cover"
     });
+}
 
+
+/******************************************************
+ ************** Modal manipulation ********************
+ *****************************************************/
+function alignModal(){
+    var modalDialog = $(this).find(".modal-dialog");
+    /* Applying the top margin on modal dialog to align it vertically center */
+    modalDialog.css("margin-top", Math.max(0, ($(window).height() - modalDialog.height()) / 2));
+}
+
+
+function victoryModal(){
+    alignModal();
+    $(".modal-dialog").css({
+        "top": "25vh"
+    });
+    $(".modal-content").css({
+        "width": "50vw",
+        "height": "40vh",
+        "background-color": "deeppink"
+    });
+    $(".modal-title").text(newGame.currentPlayer.name + " wins!");
+    $(".modal-footer button").text("New Game").css({
+
+    });
+    $("#myModal").modal({
+        show: "toggle",
+        backdrop: "static",
+        keyboard: "false"
+    });
 }
