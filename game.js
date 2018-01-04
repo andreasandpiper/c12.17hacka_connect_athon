@@ -2,6 +2,7 @@ $(document).ready(initializeApp);
 
 function initializeApp() {
     beginGame();
+    // introModal();
     //add click events
     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
     $('.reset').on('click', beginGame);
@@ -161,7 +162,7 @@ GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown){
         currentChipRow = this.incrementOrDecrement(currentChipRow, upOrDown);
         currentChipCol++;
         if(diagonalMatchCounter === 4){
-          victoryModal();
+          //victoryModal();
           this.gameOver = true;
         }
       } else {
@@ -249,17 +250,38 @@ function alignModal(){
 
 
 function victoryModal(){
-    alignModal();
     $(".modal-dialog").css({
         "top": "25vh"
     });
     $(".modal-content").css({
         "width": "50vw",
         "height": "40vh",
-        "background-color": "deeppink"
+        // "background-color": "deeppink"
     });
     $(".modal-title").text(newGame.currentPlayer.name + " wins!");
+    $(".modal-body p").text("What a battle. You should play again!");
     $(".modal-footer button").text("New Game").css({
+
+    });
+    $("#myModal").modal({
+        show: "toggle",
+        backdrop: "static",
+        keyboard: "false"
+    });
+}
+
+function introModal(){
+    alignModal();
+    // $(".modal-dialog").css({
+    //     "top": "25vh"
+    // });
+    $(".modal-content").css({
+        "width": "30vw",
+        "height": "30vh"
+    });
+    $(".modal-title").text("Tetron");
+    $(".modal-body p").text("The rules go here");
+    $(".modal-footer button").text("Play Game").css({
 
     });
     $("#myModal").modal({
