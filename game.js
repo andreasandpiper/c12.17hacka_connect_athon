@@ -98,8 +98,8 @@ GameBoard.prototype.chipDrop = function (column) {
             this.board[row][column].filled = true;
             this.board[row][column].player = this.currentPlayer.name;
             this.pickedColumn = false; //allows the next player to now click a column
-            var vertPosition = column + " " + row;
-            var horizPosition = row + " " + column;
+            var vertPosition = [parseInt(column), row];
+            var horizPosition = [row, parseInt(column)];
             this.showChip(column, row);
             //alternates players
             if (this.currentPlayer === this.playerOne) {
@@ -107,12 +107,14 @@ GameBoard.prototype.chipDrop = function (column) {
                 this.currentPlayer.horizontalPicks.push(horizPosition)
                 this.checkIfWinner(this.currentPlayer.horizontalPicks);
                 this.checkIfWinner(this.currentPlayer.verticalPicks);
+                this.checkIfDecreaseDiagonalWinner(this.currentPlayer.horizontalPicks);
                 this.currentPlayer = this.playerTwo;
             } else {
                 this.currentPlayer.verticalPicks.push(vertPosition)
                 this.currentPlayer.horizontalPicks.push(horizPosition)
                 this.checkIfWinner(this.currentPlayer.horizontalPicks);
                 this.checkIfWinner(this.currentPlayer.verticalPicks);
+                this.checkIfDecreaseDiagonalWinner(this.currentPlayer.horizontalPicks);
                 this.currentPlayer = this.playerOne;
             }
             return;
@@ -138,9 +140,9 @@ GameBoard.prototype.getPlayerNames = function () {
 GameBoard.prototype.checkIfWinner = function (array) {
     array = array.sort();
     var matchCounter = 1;
-    var previousValue = array[0].split(" ");
+    var previousValue = array[0];
     for (var chipIndex = 1; chipIndex < array.length; chipIndex++) {
-        var currentValue = array[chipIndex].split(" ");
+        var currentValue = array[chipIndex];
         if (previousValue[0] === array[chipIndex][0] && (parseInt(previousValue[1]) + 1) == parseInt(currentValue[1]) ) {
             matchCounter++;
             if (matchCounter === 4) {
@@ -150,11 +152,47 @@ GameBoard.prototype.checkIfWinner = function (array) {
         } else {
             matchCounter = 1;
         }
-        previousValue = array[chipIndex].split(" ");
+        previousValue = array[chipIndex];
       }
     previousValue = array[chipIndex];
 
 };
+
+GameBoard.prototype.checkIfDecreaseDiagonalWinner = function (array){
+  array = array.sort();
+  var diagonalMatchCounter = 0;
+
+  //for each item in the array
+  //store value of current item
+  //while 
+  //add 1 to row and column
+  //see if it is in array
+
+
+
+
+  //for each item in array
+  //check if adding one to each index value if its in array, if yes add to counter
+  // for(var firstChip = 0; firstChip< array.length ; firstChip++){
+  //   var row = parseInt(array[firstChip].split(" ")[0]);
+  //   for(var secondChip = firstChip; secondChip< array.length ; secondChip++){
+  //     var col = parseInt(array[secondChip].split(" ")[1]);
+  //     // console.log(array[row + 1][col + 1])
+  //     if(array.indexOf([row + 1] + " " + [col + 1]) !== -1){
+  //       diagonalMatchCounter++
+  //       console.log(diagonalMatchCounter)
+  //       if(diagonalMatchCounter ===4){
+  //         console.log('winner')
+  //         this.gameOver = true;
+  //       }
+  //       break;
+  //     } else {
+  //       diagonalMatchCounter = 0;
+  //     }
+  //   }
+  //
+  // }
+}
 
 function Chip(filled, player) {
     this.filled = filled;
