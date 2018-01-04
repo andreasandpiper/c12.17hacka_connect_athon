@@ -46,13 +46,16 @@ function GameBoard() {
     this.board = [];
     this.playerOne = {
         name: "",
-        picks: [],
+        verticalPicks: [],
+        horizontalPicks: [],
         playerColor: 'purple'
     };
     this.playerTwo = {
         name: "",
-        picks: [],
+        verticalPicks: [],
+        horizontalPicks: [],
         playerColor: 'blue'
+
     };
     this.currentPlayer = this.playerOne;
     this.createGameBoard = function (width, height) {
@@ -96,16 +99,24 @@ GameBoard.prototype.chipDrop = function (column) {
             this.board[row][column].filled = true;
             this.board[row][column].player = this.currentPlayer.name;
             this.pickedColumn = false; //allows the next player to now click a column
-            var position = row + " " + column;
+            var vertPosition = [parseInt(column), row];
+            var horizPosition = [row, parseInt(column)];
             this.showChip(column, row);
             //alternates players
             if (this.currentPlayer === this.playerOne) {
-                this.currentPlayer.picks.push(position);
-                this.checkIfWinner(this.currentPlayer.picks);
+                this.currentPlayer.verticalPicks.push(vertPosition)
+                this.currentPlayer.horizontalPicks.push(horizPosition)
+                this.checkIfWinner(this.currentPlayer.horizontalPicks);
+                this.checkIfWinner(this.currentPlayer.verticalPicks);
+                this.checkIfDecreaseDiagonalWinner(this.currentPlayer.horizontalPicks);
                 this.currentPlayer = this.playerTwo;
             } else {
-                this.currentPlayer.picks.push(position);
-                this.checkIfWinner(this.currentPlayer.picks);
+                this.currentPlayer.verticalPicks.push(vertPosition)
+                this.currentPlayer.horizontalPicks.push(horizPosition)
+                this.checkIfWinner(this.currentPlayer.horizontalPicks);
+                this.checkIfWinner(this.currentPlayer.verticalPicks);
+                this.checkIfDecreaseDiagonalWinner(this.currentPlayer.horizontalPicks);
+
                 this.currentPlayer = this.playerOne;
             }
             this.changeColor();
@@ -115,7 +126,6 @@ GameBoard.prototype.chipDrop = function (column) {
 };
 
 GameBoard.prototype.showChip = function (column, row) {
-    console.log(this.currentPlayer);
     $gameSquare = $('.square.col' + column + '.row' + row);
     $gameSquare.css({
         "background-image": "url('../c12.17hacka_connect_athon/images/disks/" + this.currentPlayer.playerColor + "Disk.png')",
@@ -160,35 +170,65 @@ GameBoard.prototype.changeColor = function(){
 };
 
 GameBoard.prototype.checkIfWinner = function (array) {
-    var horizontalMatchCounter = 0;
-    var verticalMatchCounter = 0;
+    array = array.sort();
+    var matchCounter = 1;
     var previousValue = array[0];
-    for (var chipIndex = 0; chipIndex < array.length; chipIndex++) {
-        //horizontal
-        if (previousValue[0] === array[chipIndex][0]) {
-            horizontalMatchCounter++;
-            if (horizontalMatchCounter === 4) {
-                console.log('winner!');
+    for (var chipIndex = 1; chipIndex < array.length; chipIndex++) {
+        var currentValue = array[chipIndex];
+        if (previousValue[0] === array[chipIndex][0] && (parseInt(previousValue[1]) + 1) == parseInt(currentValue[1]) ) {
+            matchCounter++;
+            if (matchCounter === 4) {
+                console.log('winner!')
                 victoryModal();
+
+
                 this.gameOver = true;
             }
         } else {
-            horizontalMatchCounter = 0;
+            matchCounter = 1;
         }
 
-        //vertical match
-        if (previousValue[1] === array[chipIndex][1]) {
-            verticalMatchCounter++;
-            if (verticalMatchCounter === 4) {
-                console.log('winner!');
-                this.gameOver = true;
-            }
-        } else {
-            verticalMatchCounter = 0;
-        }
         previousValue = array[chipIndex];
-    }
+      }
+    previousValue = array[chipIndex];
+
 };
+
+GameBoard.prototype.checkIfDecreaseDiagonalWinner = function (array){
+  array = array.sort();
+  var diagonalMatchCounter = 0;
+
+  //for each item in the array
+  //store value of current item
+  //while 
+  //add 1 to row and column
+  //see if it is in array
+
+
+
+
+  //for each item in array
+  //check if adding one to each index value if its in array, if yes add to counter
+  // for(var firstChip = 0; firstChip< array.length ; firstChip++){
+  //   var row = parseInt(array[firstChip].split(" ")[0]);
+  //   for(var secondChip = firstChip; secondChip< array.length ; secondChip++){
+  //     var col = parseInt(array[secondChip].split(" ")[1]);
+  //     // console.log(array[row + 1][col + 1])
+  //     if(array.indexOf([row + 1] + " " + [col + 1]) !== -1){
+  //       diagonalMatchCounter++
+  //       console.log(diagonalMatchCounter)
+  //       if(diagonalMatchCounter ===4){
+  //         console.log('winner')
+  //         this.gameOver = true;
+  //       }
+  //       break;
+  //     } else {
+  //       diagonalMatchCounter = 0;
+  //     }
+  //   }
+  //
+  // }
+}
 
 function Chip(filled, player) {
     this.filled = filled;
