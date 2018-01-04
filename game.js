@@ -46,12 +46,14 @@ function GameBoard() {
     this.board = [];
     this.playerOne = {
         name: "",
-        picks: [],
+        verticalPicks: [],
+        horizontalPicks: [],
         playerColor: 'blue'
     };
     this.playerTwo = {
         name: "",
-        picks: [],
+        verticalPicks: [],
+        horizontalPicks: [],
         playerColor: 'red'
     };
     this.currentPlayer = this.playerOne;
@@ -96,16 +98,21 @@ GameBoard.prototype.chipDrop = function (column) {
             this.board[row][column].filled = true;
             this.board[row][column].player = this.currentPlayer.name;
             this.pickedColumn = false; //allows the next player to now click a column
-            var position = row + " " + column;
+            var vertPosition = column + " " + row;
+            var horizPosition = row + " " + column;
             this.showChip(column, row);
             //alternates players
             if (this.currentPlayer === this.playerOne) {
-                this.currentPlayer.picks.push(position)
-                this.checkIfWinner(this.currentPlayer.picks)
+                this.currentPlayer.verticalPicks.push(vertPosition)
+                this.currentPlayer.horizontalPicks.push(horizPosition)
+                this.checkIfWinner(this.currentPlayer.horizontalPicks);
+                this.checkIfWinner(this.currentPlayer.verticalPicks);
                 this.currentPlayer = this.playerTwo;
             } else {
-                this.currentPlayer.picks.push(position)
-                this.checkIfWinner(this.currentPlayer.picks)
+                this.currentPlayer.verticalPicks.push(vertPosition)
+                this.currentPlayer.horizontalPicks.push(horizPosition)
+                this.checkIfWinner(this.currentPlayer.horizontalPicks);
+                this.checkIfWinner(this.currentPlayer.verticalPicks);
                 this.currentPlayer = this.playerOne;
             }
             return;
@@ -114,7 +121,6 @@ GameBoard.prototype.chipDrop = function (column) {
 };
 
 GameBoard.prototype.showChip = function (column, row) {
-    console.log(this.currentPlayer);
     $gameSquare = $('.square.col' + column + '.row' + row);
     $gameSquare.css({
         "background-image": "url('../c12.17hacka_connect_athon/images/disks/" + this.currentPlayer.playerColor + "Disk.png')",
@@ -130,34 +136,24 @@ GameBoard.prototype.getPlayerNames = function () {
 };
 
 GameBoard.prototype.checkIfWinner = function (array) {
-    var horizontalMatchCounter = 0;
-    var verticalMatchCounter = 0;
-    var previousValue = array[0];
-    for (var chipIndex = 0; chipIndex < array.length; chipIndex++) {
-        //horizontal
-        if (previousValue[0] === array[chipIndex][0]) {
-            horizontalMatchCounter++;
-            if (horizontalMatchCounter === 4) {
+    array = array.sort();
+    var matchCounter = 1;
+    var previousValue = array[0].split(" ");
+    for (var chipIndex = 1; chipIndex < array.length; chipIndex++) {
+        var currentValue = array[chipIndex].split(" ");
+        if (previousValue[0] === array[chipIndex][0] && (parseInt(previousValue[1]) + 1) == parseInt(currentValue[1]) ) {
+            matchCounter++;
+            if (matchCounter === 4) {
                 console.log('winner!')
                 this.gameOver = true;
             }
         } else {
-            horizontalMatchCounter = 0;
+            matchCounter = 1;
         }
+        previousValue = array[chipIndex].split(" ");
+      }
+    previousValue = array[chipIndex];
 
-        //vertical match
-        if (previousValue[1] === array[chipIndex][1]) {
-            verticalMatchCounter++;
-            if (verticalMatchCounter === 4) {
-                console.log('winner!')
-                this.gameOver = true;
-            }
-        } else {
-            verticalMatchCounter = 0;
-        }
-
-        previousValue = array[chipIndex];
-    }
 };
 
 function Chip(filled, player) {
