@@ -541,10 +541,10 @@ footer{
 }
 
 .preDropDisk {
-    background-size: cover;
+    background-size: contain;
     position: absolute;
-    width: 13.5%;
-    height: 100%;
+    width: 16%;
+    height:100%;
     z-index: 1;
 }
 .blue,

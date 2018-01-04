@@ -1,9 +1,9 @@
 $(document).ready(initializeApp);
 
 function initializeApp() {
-    // loadTitle();
 
-    $('.reset').on('click', beginGame);
+    loadTitle();
+    $('.reset').on('click', repeatGame);
 
     // Sets Player Colors
     $(".player1_select img").on('click', function () {
@@ -49,7 +49,6 @@ function initializeApp() {
             }, 1000);
         }
     });
-    getToGame();
 }
 
 
@@ -58,47 +57,61 @@ var newGame;
  ***************** Title Screen *****************
  ***********************************************/
 
-function getToGame(){
+function loadTitle() {
     newGame = new GameBoard();
     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
     newGame.fillBoard(7, 6);
-
-    $('.title_page').hide();
-    newGame.playerOne.name = 'GEORGE';
-    newGame.playerOne.playerColor = 'blue';
-    newGame.playerTwo.name = 'HARRY';
-    newGame.playerTwo.playerColor = 'green';
-    beginGame();
+    $('.player1_select').hide();
+    $('.player2_select').hide();
+    $('#page_content').hide();
+    $('.greeting_screen p:nth-child(1)').addClass('anim-typewriter').css('visibility', 'visible');
+    setTimeout(function () {
+        $('.greeting_screen p:nth-child(2)').addClass('anim-typewriter').css('visibility', 'visible');
+        setTimeout(function () {
+            $('.greeting_screen p:nth-child(3)').addClass('anim-typewriter').css('visibility', 'visible');
+            setTimeout(function () {
+                $('.player1_select').addClass('animated fadeIn').show();
+            }, 4000);
+        }, 4000);
+    }, 4000);
 }
 
-
-// function loadTitle() {
-//     newGame = new GameBoard();
-//     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
-//     newGame.fillBoard(7, 6);
-//     $('.player1_select').hide();
-//     $('.player2_select').hide();
-//     $('#page_content').hide();
-//     $('.greeting_screen p:nth-child(1)').addClass('anim-typewriter').css('visibility', 'visible');
-//     setTimeout(function () {
-//         $('.greeting_screen p:nth-child(2)').addClass('anim-typewriter').css('visibility', 'visible');
-//         setTimeout(function () {
-//             $('.greeting_screen p:nth-child(3)').addClass('anim-typewriter').css('visibility', 'visible');
-//             setTimeout(function () {
-//                 $('.player1_select').addClass('animated fadeIn').show();
-//             }, 4000);
-//         }, 4000);
-//     }, 4000);
-// }
-//
 function beginGame() {
     $(".game_board").empty();
-    diskDropInit();
+    $(".game_grid").empty();
+    //create new game
     newGame.createGameBoard(7, 6);
+    diskDropInit();
     newGame.currentPlayer = newGame.playerOne;
     $('#player1').text(newGame.playerOne.name).addClass('neonText-' + newGame.playerOne.playerColor);
     $('#player2').text(newGame.playerTwo.name);
 }
+
+function repeatGame() {
+    $('.fade').hide();
+    var play1name = newGame.playerOne.name;
+    var play1color = newGame.playerOne.playerColor;
+    var play2name = newGame.playerTwo.name;
+    var play2color = newGame.playerTwo.playerColor;
+
+    $(".game_board").empty();
+    $(".game_grid").empty();
+
+    newGame = new GameBoard();
+    $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
+    newGame.fillBoard(7, 6);
+    newGame.createGameBoard(7, 6);
+    newGame.playerOne.name = play1name;
+    newGame.playerOne.playerColor = play1color;
+    newGame.playerTwo.name = play2name;
+    newGame.playerTwo.playerColor = play2color;
+
+    newGame.currentPlayer = newGame.playerOne;
+    $('#player1').text(newGame.playerOne.name).addClass('neonText-' + newGame.playerOne.playerColor);
+    $('#player2').text(newGame.playerTwo.name);
+}
+
+
 
 function GameBoard() {
   this.id = Math.random();
@@ -206,6 +219,7 @@ GameBoard.prototype.checkIfXYWinner = function (array) {
             matchCounter++;
             if (matchCounter === 4) {
               $(".game_board").off("click", ".square", newGame.columnClicked.bind(newGame));
+              victoryModal();
               this.gameOver = true;
             }
         } else {
@@ -262,27 +276,12 @@ GameBoard.prototype.changeColor = function () {
     if (this.currentPlayer === this.playerOne) {
         $('#player1').addClass('neonText-' + this.playerOne.playerColor);
         $('#player2').removeClass('neonText-' + this.playerTwo.playerColor);
-        $(".preDropDisk").switchClass(this.playerOne.playerColor, this.playerTwo.playerColor, 500);
+        $(".preDropDisk").switchClass(this.playerTwo.playerColor,this.playerOne.playerColor);
     } else {
         $('#player2').addClass('neonText-' + this.playerTwo.playerColor);
         $('#player1').removeClass('neonText-' + this.playerOne.playerColor);
-        $(".preDropDisk").switchClass(this.playerTwo.playerColor, this.playerOne.playerColor, 500);
+        $(".preDropDisk").switchClass(this.playerOne.playerColor, this.playerTwo.playerColor);
     }
-
-  // Backup Color Switch
-//     var $disk = $(".preDropDisk");
-//     $disk.addClass('animated fadeOut');
-//     setTimeout(function () {
-//         $disk.removeClass('animated fadeOut');
-//         setTimeout(function () {
-//             $disk.css("background-image", "url('images/disks/"+ newGame.currentPlayer.playerColor + "Disk.png')");
-//             $disk.addClass('animated fadeIn');
-//             setTimeout(function(){
-//                 $disk.removeClass('animated fadeIn');
-//             },1000);
-//         }, 1);
-//     }, 1000);
-
 };
 
 function Chip(filled, player) {
@@ -296,21 +295,13 @@ function Chip(filled, player) {
 
 function diskDropInit() {
     var $disk = $(".preDropDisk");
-
     $(document).on('mousemove', function (e) {
         $disk.css({
-            left: e.pageX - 575,
-            top: 0
+            left: e.pageX - ($('#pre_drop_disk_box')[0].getBoundingClientRect().left - $('body')[0].getBoundingClientRect().left+60),
+            top: 10
         });
     });
-    $disk.addClass('animated fadeIn');
-    setTimeout(function () {
-        $disk.removeClass('animated fadeIn');
-    }, 1000);
-    $disk.css({
-        "background-image": "url('images/disks/" + newGame.currentPlayer.playerColor + "Disk.png')",
-        "background-size": "cover"
-    });
+    $disk.addClass(newGame.playerOne.playerColor);
 }
 
 /******************************************************
@@ -344,6 +335,7 @@ function victoryModal(){
         "transform": "translate(-50%, -50%)"
     });
     $(".modal-content button").text("New Game");
+
 }
 
 function introModal(){
@@ -358,5 +350,5 @@ function introModal(){
     $(".modal-title").text("Tetron");
     $(".modal-body p").text("The rules go here");
 
-    $(".modal-content button").text("Play Game")
+    $(".modal-content button ").text("Play Game")
 }
