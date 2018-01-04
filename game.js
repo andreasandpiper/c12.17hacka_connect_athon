@@ -3,7 +3,11 @@ $(document).ready(initializeApp);
 function initializeApp() {
 
     loadTitle();
-    $('.reset').on('click', repeatGame);
+    $('#reset-button').on('click', repeatGame);
+    $('.close-modal').on('click', function(){
+        $('#reset-button').css('visibility', 'visible');
+        $('.fade').hide();
+    });
 
     // Sets Player Colors
     $(".player1_select img").on('click', function () {
@@ -109,6 +113,7 @@ function repeatGame() {
     newGame.currentPlayer = newGame.playerOne;
     $('#player1').text(newGame.playerOne.name).addClass('neonText-' + newGame.playerOne.playerColor);
     $('#player2').text(newGame.playerTwo.name);
+    $('#reset-button').css('visibility', 'hidden');
 }
 
 
@@ -334,7 +339,7 @@ function victoryModal(){
         "left": "50%",
         "transform": "translate(-50%, -50%)"
     });
-    $(".modal-content button").text("New Game");
+    $(".modal-content button").text("RESULTS");
 
 }
 
