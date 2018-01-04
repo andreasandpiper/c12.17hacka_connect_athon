@@ -1,7 +1,7 @@
 $(document).ready(initializeApp);
 
 function initializeApp() {
-    loadTitle();
+    // loadTitle();
 
     $('.reset').on('click', beginGame);
 
@@ -48,35 +48,49 @@ function initializeApp() {
                 }, 1000)
             }, 1000);
         }
-    })
+    });
+    getToGame();
 }
 
 
 var newGame;
-
 /************************************************
  ***************** Title Screen *****************
  ***********************************************/
 
-function loadTitle() {
+function getToGame(){
     newGame = new GameBoard();
     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
     newGame.fillBoard(7, 6);
-    $('.player1_select').hide();
-    $('.player2_select').hide();
-    $('#page_content').hide();
-    $('.greeting_screen p:nth-child(1)').addClass('anim-typewriter').css('visibility', 'visible');
-    setTimeout(function () {
-        $('.greeting_screen p:nth-child(2)').addClass('anim-typewriter').css('visibility', 'visible');
-        setTimeout(function () {
-            $('.greeting_screen p:nth-child(3)').addClass('anim-typewriter').css('visibility', 'visible');
-            setTimeout(function () {
-                $('.player1_select').addClass('animated fadeIn').show();
-            }, 4000);
-        }, 4000);
-    }, 4000);
+
+    $('.title_page').hide();
+    newGame.playerOne.name = 'GEORGE';
+    newGame.playerOne.playerColor = 'blue';
+    newGame.playerTwo.name = 'HARRY';
+    newGame.playerTwo.playerColor = 'green';
+    beginGame();
 }
 
+
+// function loadTitle() {
+//     newGame = new GameBoard();
+//     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
+//     newGame.fillBoard(7, 6);
+//     $('.player1_select').hide();
+//     $('.player2_select').hide();
+//     $('#page_content').hide();
+//     $('.greeting_screen p:nth-child(1)').addClass('anim-typewriter').css('visibility', 'visible');
+//     setTimeout(function () {
+//         $('.greeting_screen p:nth-child(2)').addClass('anim-typewriter').css('visibility', 'visible');
+//         setTimeout(function () {
+//             $('.greeting_screen p:nth-child(3)').addClass('anim-typewriter').css('visibility', 'visible');
+//             setTimeout(function () {
+//                 $('.player1_select').addClass('animated fadeIn').show();
+//             }, 4000);
+//         }, 4000);
+//     }, 4000);
+// }
+//
 function beginGame() {
     $(".game_board").empty();
     diskDropInit();
@@ -193,8 +207,6 @@ GameBoard.prototype.checkIfXYWinner = function (array) {
             if (matchCounter === 4) {
               $(".game_board").off("click", ".square", newGame.columnClicked.bind(newGame));
               this.gameOver = true;
-
-                // victoryModal();
             }
         } else {
             matchCounter = 1;
@@ -237,11 +249,11 @@ GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown) {
             }
         }
     }
-}
+};
 
 GameBoard.prototype.showChip = function (column, row) {
     $gameSquare = $('.square.col' + column + '.row' + row);
-    $gameSquare.addClass('.'+newGame.currentPlayer.playerColor);
+    $gameSquare.addClass(newGame.currentPlayer.playerColor);
     $gameSquare.addClass("fallToRow" + row);
     this.changeColor();
 };
@@ -250,11 +262,11 @@ GameBoard.prototype.changeColor = function () {
     if (this.currentPlayer === this.playerOne) {
         $('#player1').addClass('neonText-' + this.playerOne.playerColor);
         $('#player2').removeClass('neonText-' + this.playerTwo.playerColor);
-        $(".preDropDisk").switchClass(this.playerTwo.playerColor, this.playerOne.playerColor, 500, 'swing');
+        $(".preDropDisk").switchClass(this.playerOne.playerColor, this.playerTwo.playerColor, 500);
     } else {
         $('#player2').addClass('neonText-' + this.playerTwo.playerColor);
         $('#player1').removeClass('neonText-' + this.playerOne.playerColor);
-        $(".preDropDisk").switchClass(this.playerOne.playerColor, this.playerTwo.playerColor, 500, 'swing');
+        $(".preDropDisk").switchClass(this.playerTwo.playerColor, this.playerOne.playerColor, 500);
     }
 
   // Backup Color Switch

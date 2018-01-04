@@ -552,7 +552,7 @@ footer{
 .purple,
 .red,
 .yellow{
-    background-size: contain;
+    background-size: cover;
 }
 .blue{
     background-image: url("../c12.17hacka_connect_athon/images/disks/blueDisk.png");
