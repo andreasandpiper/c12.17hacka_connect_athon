@@ -25,17 +25,23 @@ function initializeApp() {
     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
     //function for clickedColumn = newGame.columnClicked.bind(newGame)
     diskDropInit();
-
 }
+
+/************************************************
+ ***************** Title Screen *****************
+ ***********************************************/
+
+$('.title_page').hide();
+$('.player1_select').hide();
+$('.player2_select').hide();
+// $('#page_content').hide();
+
 
 var newGame;
 
 function beginGame() {
-    //create new game
     newGame = new GameBoard();
-    //fill board
     newGame.fillBoard(7, 6);
-    //get playerNames
     newGame.getPlayerNames();
     newGame.createGameBoard(7, 6);
 }

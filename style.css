@@ -15,6 +15,55 @@ header{
     height: 10vh;
 }
 
+/************************************************
+********** Title Screen & Char Select ***********
+*************************************************/
+
+.title_page{
+    height: 100%;
+    width: 100%;
+}
+
+.greeting_screen{
+    font-family: 'Anonymous Pro', monospace;
+    color: #F66A35;
+    position: relative;
+    top: 2%;
+    left: 1%;
+    width: 24em;
+    letter-spacing: 5px;
+    border-right: 2px solid rgba(255,255,255,.75);
+    font-size: 100%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    transform: translateY(-50%);
+}
+.anim-typewriter1{
+    animation: typewriter 2s steps(20) 2s 1 normal both,
+    blinkTextCursor 500ms steps(20) infinite normal;
+}
+@keyframes typewriter{
+    from{width: 0;}
+    to{width: 19em;}
+}
+@keyframes blinkTextCursor{
+    from{border-right-color: rgba(255,255,255,1);}
+    to{border-right-color: transparent;}
+}
+
+.player1_select{
+
+}
+
+.player2_select{
+
+}
+
+
+
+
+
 #page_content{
     position: relative;
     display: block;
