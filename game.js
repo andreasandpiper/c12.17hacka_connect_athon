@@ -33,6 +33,7 @@ function beginGame() {
 }
 
 function GameBoard() {
+    this.tokenActivated = false;
     this.id = Math.random();
     this.gameOver = false;
     this.pickedColumn = false;
@@ -42,14 +43,14 @@ function GameBoard() {
         verticalPicks: [],
         horizontalPicks: [],
         playerColor: 'purple',
-        tokenCount: 0
+        tokenCount: 1
     };
     this.playerTwo = {
         name: "",
         verticalPicks: [],
         horizontalPicks: [],
         playerColor: 'blue',
-        tokenCount: 0
+        tokenCount: 1
 
     };
     this.tetrisShapes = [
@@ -92,7 +93,6 @@ GameBoard.prototype.checkIfTetrisMatch = function (array){
       match = true;
     }
     if(match){
-      console.log("match!");
       this.currentPlayer.tokenCount++;
       this.tetrisShapes.shift();
       return;
@@ -100,11 +100,47 @@ GameBoard.prototype.checkIfTetrisMatch = function (array){
   }
 }
 
+GameBoard.prototype.dropAllChipsFromColumn = function(col){
+  $('.col' + col).removeAttr('style');
+  for(var row=0 ; row < this.board.length; row++){
+    if(this.board[row][col].filled){
+        var lastClass = $('.col' + col + ".row" + row).attr("class").split(" ").pop();
+        $('.col' + col + ".row" + row).removeClass(lastClass);
+        var chipsToDropIndex = row+ col;
+        if(this.playerOne.horizontalPicks.indexOf(chipsToDropIndex) !== -1){
+            var locationOfCip = this.playerOne.horizontalPicks.indexOf(chipsToDropIndex);
+            this.playerOne.horizontalPicks.splice(locationOfCip, 1)
+        }
+        if(this.playerTwo.horizontalPicks.indexOf(chipsToDropIndex) !== -1){
+            var locationOfCip = this.playerTwo.horizontalPicks.indexOf(chipsToDropIndex);
+            this.playerTwo.horizontalPicks.splice(locationOfCip, 1)
+        }
+        var chipsToDropIndex = col+row;
+        if(this.playerOne.verticalPicks.indexOf(chipsToDropIndex) !== -1){
+            var locationOfCip = this.playerOne.verticalPicks.indexOf(chipsToDropIndex);
+            this.playerOne.verticalPicks.splice(locationOfCip, 1)
+        }
+        if(this.playerTwo.verticalPicks.indexOf(chipsToDropIndex) !== -1){
+            var locationOfCip = this.playerTwo.verticalPicks.indexOf(chipsToDropIndex);
+            this.playerTwo.verticalPicks.splice(locationOfCip, 1)
+        }
+        var newChip = new Chip(false, null);
+        this.board[row][col] = newChip;
+    }
+
+  }
+}
 
 GameBoard.prototype.columnClicked = function (event) {
   //get which column was clicked from the class
   var targetColumn = $(event.target).attr("class").split(" ")[1];
   var column = targetColumn[targetColumn.length - 1];
+  if(this.tokenActivated){
+    this.dropAllChipsFromColumn(column);
+    this.currentPlayer.tokenCount--;
+    this.tokenActivated = false; //if add animation, change location of this
+    return;
+  }
     //check to make sure only one animation at a time
     //check if there are open spots in the column
     if (this.pickedColumn || this.gameOver || this.board[0][column].filled) {
