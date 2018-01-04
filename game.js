@@ -3,8 +3,6 @@ $(document).ready(initializeApp);
 function initializeApp() {
     loadTitle();
 
-    $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
-
     $('.reset').on('click', beginGame);
 
     // Sets Player Colors
@@ -56,12 +54,14 @@ function initializeApp() {
 
 var newGame;
 
+
 /************************************************
  ***************** Title Screen *****************
  ***********************************************/
 
 function loadTitle() {
     newGame = new GameBoard();
+    $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
     newGame.fillBoard(7, 6);
     $('.player1_select').hide();
     $('.player2_select').hide();
@@ -88,6 +88,7 @@ function beginGame() {
 }
 
 function GameBoard() {
+  this.id = Math.random();
     this.gameOver = false;
     this.pickedColumn = false;
     this.board = [];
@@ -191,8 +192,10 @@ GameBoard.prototype.checkIfXYWinner = function (array) {
         if (previousValue[0] === array[chipIndex][0] && (parseInt(previousValue[1]) + 1) == parseInt(currentValue[1])) {
             matchCounter++;
             if (matchCounter === 4) {
-                victoryModal();
-                this.gameOver = true;
+              $(".game_board").off("click", ".square", newGame.columnClicked.bind(newGame));
+              this.gameOver = true;
+
+                // victoryModal();
             }
         } else {
             matchCounter = 1;
@@ -215,25 +218,22 @@ GameBoard.prototype.incrementOrDecrement = function (currentValue, upOrDown) {
     return currentValue;
 };
 
-GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown) {
-    var diagonalMatchCounter = 1;
-    for (var chipIndex = 0; chipIndex < array.length; chipIndex++) {
-        var currentChipRow = parseInt(array[chipIndex][0]);
-        var currentChipCol = parseInt(array[chipIndex][1]);
-        for (var compareChip = chipIndex; compareChip < array.length; compareChip++) {
-            var lookForChip = (this.incrementOrDecrement(currentChipRow, upOrDown)).toString() + (currentChipCol + 1).toString();
-            if (array.indexOf(lookForChip) !== -1) {
-                diagonalMatchCounter++;
-                currentChipRow = this.incrementOrDecrement(currentChipRow, upOrDown);
-                currentChipCol++;
-                if (diagonalMatchCounter === 4) {
-                    //victoryModal();
-                    this.gameOver = true;
-                }
-            } else {
-                diagonalMatchCounter = 1;
-                break;
-            }
+
+GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown){
+  var diagonalMatchCounter = 1;
+  for(var chipIndex = 0 ; chipIndex < array.length ; chipIndex++){
+    var currentChipRow = parseInt(array[chipIndex][0]);
+    var currentChipCol = parseInt(array[chipIndex][1]);
+    for(var compareChip = chipIndex ; compareChip< array.length ; compareChip++){
+      var lookForChip = (this.incrementOrDecrement(currentChipRow, upOrDown)).toString() + (currentChipCol+1).toString();
+      if(array.indexOf(lookForChip) !== -1){
+        diagonalMatchCounter++;
+        currentChipRow = this.incrementOrDecrement(currentChipRow, upOrDown);
+        currentChipCol++;
+        if(diagonalMatchCounter === 4){
+          //victoryModal();
+          this.gameOver = true;
+          $(".game_board").off("click", ".square", newGame.columnClicked.bind(newGame));
         }
     }
 };
@@ -245,7 +245,6 @@ GameBoard.prototype.showChip = function (column, row) {
     this.changeColor();
 };
 
-
 GameBoard.prototype.changeColor = function () {
     if (this.currentPlayer === this.playerOne) {
         $('#player1').addClass('neonText-' + this.playerOne.playerColor);
@@ -256,11 +255,25 @@ GameBoard.prototype.changeColor = function () {
         $('#player1').removeClass('neonText-' + this.playerOne.playerColor);
         $(".preDropDisk").switchClass(this.playerOne.playerColor, this.playerTwo.playerColor, 500, 'swing');
     }
+
+  // Backup Color Switch
+//     var $disk = $(".preDropDisk");
+//     $disk.addClass('animated fadeOut');
+//     setTimeout(function () {
+//         $disk.removeClass('animated fadeOut');
+//         setTimeout(function () {
+//             $disk.css("background-image", "url('images/disks/"+ newGame.currentPlayer.playerColor + "Disk.png')");
+//             $disk.addClass('animated fadeIn');
+//             setTimeout(function(){
+//                 $disk.removeClass('animated fadeIn');
+//             },1000);
+//         }, 1);
+//     }, 1000);
+
 };
 
-function Chip(filled, player) {
+function Chip(filled) {
     this.filled = filled;
-    this.player = player;
 }
 
 /************************************************
