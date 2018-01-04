@@ -4,6 +4,7 @@
     <link href="https://fonts.googleapis.com/css?family=Anonymous+Pro|Roboto+Mono|VT323|Audiowide"
           rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <link rel="stylesheet" href="style.css">
     <script src="game.js"></script>
@@ -11,11 +12,61 @@
 
 <body>
 
-<!--<div class="title_page">-->
-    <!--<p class="greeting_screen anim-typewriter1">Tracking location ...</p>-->
-    <!--<div class="player1_select"></div>-->
-    <!--<div class="player2_select"></div>-->
-<!--</div>-->
+<div class="title_page">
+    <div class="greeting_screen">
+        <p>Initializing...</p>
+        <p>No users found...</p>
+        <p>Establishing connection with player 1...</p>
+        <p>Establishing connection with player 2...</p>
+
+    </div>
+    <div class="player1_select">
+        <div class="player_names">
+            <label for="player1_name"><span>Player 1:</span></label>
+            <input type="text" name="player1_name" id="player1_name" placeholder="enter name">
+        </div>
+        <div class="rules"><span>HOW TO PLAY</span><br><br>
+            Players alternate by selecting a column to drop a chip to the bottom of desired column. <br>
+            <br>
+            Only one chip can occupy a spot.<br><br>
+            The game is over when a player has 4 chips in a row or there are no available spots on the board.<br><br>
+            A player can win with a vertical, horizontal, or diagonal match.
+        </div>
+        <div>
+            <img class="blue" src="../c12.17hacka_connect_athon/images/disks/blueDisk.png">
+            <img class="green" src="../c12.17hacka_connect_athon/images/disks/greenDisk.png">
+            <img class="purple" src="../c12.17hacka_connect_athon/images/disks/purpleDisk.png">
+        </div>
+        <div>
+            <img class="red" src="../c12.17hacka_connect_athon/images/disks/redDisk.png">
+            <img class="yellow" src="../c12.17hacka_connect_athon/images/disks/yellowDisk.png">
+        </div>
+        <button type="button" class="proceed_button">proceed...</button>
+    </div>
+    <div class="player2_select">
+        <div class="player_names">
+            <label for="player2_name"><span>Player 2:</span></label>
+            <input type="text" name="player2_name" id="player2_name" placeholder="enter name">
+        </div>
+        <div class="rules"><span>HOW TO PLAY</span><br><br>
+            Players alternate by selecting a column to drop a chip to the bottom of desired column. <br>
+            <br>
+            Only one chip can occupy a spot.<br><br>
+            The game is over when a player has 4 chips in a row or there are no available spots on the board.<br><br>
+            A player can win with a vertical, horizontal, or diagonal match.
+        </div>
+        <div>
+            <img class="blue" src="../c12.17hacka_connect_athon/images/disks/blueDisk.png">
+            <img class="green" src="../c12.17hacka_connect_athon/images/disks/greenDisk.png">
+            <img class="purple" src="../c12.17hacka_connect_athon/images/disks/purpleDisk.png">
+        </div>
+        <div>
+            <img class="red" src="../c12.17hacka_connect_athon/images/disks/redDisk.png">
+            <img class="yellow" src="../c12.17hacka_connect_athon/images/disks/yellowDisk.png">
+        </div>
+        <button type="button" class="proceed_button">proceed...</button>
+    </div>
+</div>
 
 
 <div id="page_content">
@@ -48,7 +99,7 @@
             <img src="images/Portal.svg">
             <button class="modal-action">Play Again</button>
         </div>
-    </div>
+    </div> -->
 </div>
 </body>
 </html>

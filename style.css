@@ -25,41 +25,102 @@ header{
 }
 
 .greeting_screen{
-    font-family: 'Anonymous Pro', monospace;
-    color: #F66A35;
+    position: absolute;
+    top: 10%;
+    left: 5%;
+    overflow: hidden;
+    width: 19em;
+    height: 10%;
+}
+.greeting_screen p{
+    visibility: hidden;
+    font-family: 'VT323', monospace;
+    color: white;
     position: relative;
-    top: 2%;
-    left: 1%;
-    width: 24em;
-    letter-spacing: 5px;
+    width: 19em;
     border-right: 2px solid rgba(255,255,255,.75);
     font-size: 100%;
-    text-align: center;
     white-space: nowrap;
     overflow: hidden;
-    transform: translateY(-50%);
 }
-.anim-typewriter1{
-    animation: typewriter 2s steps(20) 2s 1 normal both,
-    blinkTextCursor 500ms steps(20) infinite normal;
+
+.anim-typewriter{
+    animation: typewriter 2s steps(26) 1s 1 normal both,
+    blinkTextCursor 500ms steps(26) infinite normal;
 }
 @keyframes typewriter{
     from{width: 0;}
-    to{width: 19em;}
+    to{width: 20em;}
 }
 @keyframes blinkTextCursor{
     from{border-right-color: rgba(255,255,255,1);}
     to{border-right-color: transparent;}
 }
 
-.player1_select{
-
-}
-
+.player1_select,
 .player2_select{
+    border: 1px white solid;
+    position: fixed;
+    width: 40vw;
+    height: 50vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-content: center;
 
 }
 
+.player_names{
+    text-align: center;
+    width: 50%;
+    color: white;
+    font-family: 'VT323', monospace;
+    font-size: 150%;
+    margin: 5%;
+    border: 1px white solid;
+}
+.player_names input{
+    background-color: #181818;
+    color: white;
+    font-size: 100%;
+    font-family: 'VT323', monospace;
+    border: none;
+}
+
+.title_page img{
+    width: 6vw;
+}
+
+.title_page img:hover{
+    cursor: pointer;
+}
+
+.rules{
+    text-align: center;
+    color: white;
+    font-family: 'VT323', monospace;
+    width: 80%;
+    margin-bottom: 5%;
+    font-size: 90%;
+}
+
+.rules span{
+    font-size: 160%;
+}
+
+.proceed_button{
+    height: 4vh;
+    width: 8vw;
+    margin: 3%;
+    color: white;
+    font-size: 120%;
+    font-family: 'VT323', monospace;
+    background-color: #181818;
+    border: 1px white solid;
+}
 
 /************************************************
 ****************** Game Screen ******************
@@ -168,7 +229,7 @@ footer{
     padding: 0 0 0 15px;
     width:10%;
     letter-spacing: 15px;
-    font-family: 'Roboto Mono', monospace;
+    font-family: 'VT323', monospace;
     font-weight: bolder;
 }
 
@@ -243,6 +304,9 @@ footer{
             0 0 25px #FFFF33,
             0 0 30px #FFFF33;
 }
+
+
+
 
 
 /************************************************
@@ -468,7 +532,6 @@ footer{
     animation-name: fadeOut;
 }
 
-
 #pre_drop_disk_box{
     position: absolute;
     top: -9.5vh;
@@ -480,8 +543,29 @@ footer{
 .preDropDisk {
     background-size: cover;
     position: absolute;
-    width: 14%;
+    width: 13.5%;
     height: 100%;
     z-index: 1;
 }
-
+.blue,
+.green,
+.purple,
+.red,
+.yellow{
+    background-size: contain;
+}
+.blue{
+    background-image: url("../c12.17hacka_connect_athon/images/disks/blueDisk.png");
+}
+.green{
+    background-image: url("../c12.17hacka_connect_athon/images/disks/greenDisk.png");
+}
+.purple{
+    background-image: url("../c12.17hacka_connect_athon/images/disks/purpleDisk.png");
+}
+.red{
+    background-image: url("../c12.17hacka_connect_athon/images/disks/redDisk.png");
+}
+.yellow{
+    background-image: url("../c12.17hacka_connect_athon/images/disks/yellowDisk.png");
+}
