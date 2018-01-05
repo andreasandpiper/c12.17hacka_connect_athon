@@ -116,8 +116,6 @@ function repeatGame() {
     $('#reset-button').css('visibility', 'hidden');
 }
 
-
-
 function GameBoard() {
   this.id = Math.random();
     this.gameOver = false;
@@ -247,7 +245,6 @@ GameBoard.prototype.incrementOrDecrement = function (currentValue, upOrDown) {
     types[upOrDown]();
     return currentValue;
 };
-
 
 GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown) {
     var diagonalMatchCounter = 1;
