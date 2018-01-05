@@ -127,14 +127,32 @@ function GameBoard() {
         name: "",
         verticalPicks: [],
         horizontalPicks: [],
-        playerColor: ''
+        playerColor: '',
+        tokenCount: 0,
+        player: 'playerOne'
     };
     this.playerTwo = {
         name: "",
         verticalPicks: [],
         horizontalPicks: [],
-        playerColor: ''
+        playerColor: '',
+        tokenCount: 0,
+        player: 'playerTwo'
     };
+    this.currentPlayer = this.playerOne;
+    this.createGameBoard = function (width, height) {
+        for (var row = 0; row < height; row++) {
+            for (var col = 0; col < width; col++) {
+                var square = $('<div>').addClass("square col" + col + " row" + row).attr("draggable", false);
+                $(".game_board").append(square);
+                var gridSquare = $('<div>').addClass('game_grid_squares');
+                $(".game_grid").append(gridSquare);
+            }
+        }
+    };
+    this.tetrisShapes = [
+      ['+1 +0','+1 -1','+2 -1']
+    ]
     this.currentPlayer = this.playerOne;
     this.createGameBoard = function (width, height) {
         for (var row = 0; row < height; row++) {
@@ -148,12 +166,79 @@ function GameBoard() {
     }
 }
 
+GameBoard.prototype.checkIfTetrisMatch = function (array){
+  if(!this.tetrisShapes.length){
+    return;
+  }
+  array = array.sort();
+  // var tetrisBlocks = tetrisShapes[0][0].split(" ");
+  var match = false;
+  for(var chip=0 ; chip<array.length ; chip++){
+    var chipPosition = array[chip].split("");
+    for(var tetrisChipPos=0 ; tetrisChipPos < this.tetrisShapes[0].length ; tetrisChipPos++){
+      var block = this.tetrisShapes[0][tetrisChipPos].split(" ");
+      var row = this.incrementOrDecrement(chipPosition[0], block[0][0], block[0][1]);
+      var col = this.incrementOrDecrement(chipPosition[1], block[1][0], block[1][1]);
+      var chipToFind = row.toString()+col;
+      // console.log('array' , array, 'chiptofind: ' , chipToFind);
+      if(array.indexOf(chipToFind) === -1){
+        match = false;
+        break;
+      }
+      match = true;
+    }
+    if(match){
+      this.currentPlayer.tokenCount++;
+      this.tetrisShapes.shift();
+      return;
+    }
+  }
+}
+
+GameBoard.prototype.dropAllChipsFromColumn = function(col){
+  $('.col' + col).removeAttr('style');
+  for(var row=0 ; row < this.board.length; row++){
+    if(this.board[row][col].filled){
+        var lastClass = $('.col' + col + ".row" + row).attr("class").split(" ").pop();
+        $('.col' + col + ".row" + row).removeClass(lastClass);
+        var chipsToDropIndex = row+ col;
+        if(this.playerOne.horizontalPicks.indexOf(chipsToDropIndex) !== -1){
+            var locationOfCip = this.playerOne.horizontalPicks.indexOf(chipsToDropIndex);
+            this.playerOne.horizontalPicks.splice(locationOfCip, 1)
+        }
+        if(this.playerTwo.horizontalPicks.indexOf(chipsToDropIndex) !== -1){
+            var locationOfCip = this.playerTwo.horizontalPicks.indexOf(chipsToDropIndex);
+            this.playerTwo.horizontalPicks.splice(locationOfCip, 1)
+        }
+        var chipsToDropIndex = col+row;
+        if(this.playerOne.verticalPicks.indexOf(chipsToDropIndex) !== -1){
+            var locationOfCip = this.playerOne.verticalPicks.indexOf(chipsToDropIndex);
+            this.playerOne.verticalPicks.splice(locationOfCip, 1)
+        }
+        if(this.playerTwo.verticalPicks.indexOf(chipsToDropIndex) !== -1){
+            var locationOfCip = this.playerTwo.verticalPicks.indexOf(chipsToDropIndex);
+            this.playerTwo.verticalPicks.splice(locationOfCip, 1)
+        }
+        var newChip = new Chip(false, null);
+        this.board[row][col] = newChip;
+    }
+
+  }
+}
+
+
 GameBoard.prototype.columnClicked = function (event) {
     //get which column was clicked from the class
     var targetColumn = $(event.target).attr("class").split(" ")[1];
     var column = targetColumn[targetColumn.length - 1];
     //check to make sure only one animation at a time
     //check if there are open spots in the column
+    if(this.tokenActivated){
+      this.dropAllChipsFromColumn(column);
+      this.currentPlayer.tokenCount--;
+      this.tokenActivated = false; //if add animation, change location of this
+      return;
+    }
     if (this.pickedColumn || this.gameOver || this.board[0][column].filled) {
         return
     }
@@ -181,6 +266,9 @@ GameBoard.prototype.chipDrop = function (column) {
             var vertPosition = column + row;
             var horizPosition = row + column;
             this.showChip(column, row);
+            this.currentPlayer.verticalPicks.push(vertPosition)
+            this.currentPlayer.horizontalPicks.push(horizPosition)
+            this.checkIfTetrisMatch(this.currentPlayer.verticalPicks);
             //alternates players
             if (this.currentPlayer === this.playerOne) {
                 this.CheckIfWinner(vertPosition, horizPosition);
@@ -197,8 +285,6 @@ GameBoard.prototype.chipDrop = function (column) {
 };
 
 GameBoard.prototype.CheckIfWinner = function (vertPosition, horizPosition) {
-    this.currentPlayer.verticalPicks.push(vertPosition);
-    this.currentPlayer.horizontalPicks.push(horizPosition);
     this.checkIfXYWinner(this.currentPlayer.horizontalPicks);
     this.checkIfXYWinner(this.currentPlayer.verticalPicks);
     this.checkIfDiagonalWinner(this.currentPlayer.horizontalPicks.sort(), "+");//decreasing matches
@@ -235,18 +321,20 @@ GameBoard.prototype.checkIfXYWinner = function (array) {
     previousValue = array[chipIndex];
 };
 
-GameBoard.prototype.incrementOrDecrement = function (currentValue, upOrDown) {
-    var types = {
-        '+': function () {
-            currentValue += 1;
-        },
-        '-': function () {
-            currentValue -= 1;
-        }
-    };
-    types[upOrDown]();
-    return currentValue;
-};
+GameBoard.prototype.incrementOrDecrement = function(currentValue, upOrDown, amount){
+  currentValue = parseInt(currentValue);
+  amount = parseInt(amount);
+  var types = {
+    '+': function(){
+      currentValue += amount;
+    },
+    '-': function(){
+      currentValue -= amount;
+    }
+  }
+  var result = types[upOrDown]();
+  return currentValue;
+}
 
 
 GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown) {
@@ -255,18 +343,22 @@ GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown) {
         var currentChipRow = parseInt(array[chipIndex][0]);
         var currentChipCol = parseInt(array[chipIndex][1]);
         for (var compareChip = chipIndex; compareChip < array.length; compareChip++) {
-            var lookForChip = (this.incrementOrDecrement(currentChipRow, upOrDown)).toString() + (currentChipCol + 1).toString();
+            var lookForChip = (this.incrementOrDecrement(currentChipRow, upOrDown, 1)).toString() + (currentChipCol + 1).toString();
             if (array.indexOf(lookForChip) !== -1) {
                 diagonalMatchCounter++;
-                currentChipRow = this.incrementOrDecrement(currentChipRow, upOrDown);
-                currentChipCol++;
+               currentChipRow = this.incrementOrDecrement(currentChipRow, upOrDown, 1);
+               currentChipCol++;
                 if (diagonalMatchCounter === 4) {
+                  console.log('diasonal win')
                     victoryModal();
                     this.gameOver = true;
                     $(".game_board").off("click", ".square", newGame.columnClicked.bind(newGame));
                 }
+            } else {
+              diagonalMatchCounter = 1;
+              break;
             }
-        }
+          }
     }
 };
 
