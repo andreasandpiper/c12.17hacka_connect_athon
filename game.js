@@ -8,6 +8,7 @@ function initializeApp() {
         $('#reset-button').css('visibility', 'visible');
         $('.fade').hide();
     });
+    $('.token').on('click', tokenClicked);
 
     // Sets Player Colors
     $(".player1_select img").on('click', function () {
@@ -64,7 +65,6 @@ var newGame;
 function loadTitle() {
     newGame = new GameBoard();
     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
-    $('.token').on('click', newGame.tokenClicked.bind(newGame));
     newGame.fillBoard(7, 6);
     $('.player1_select').hide();
     $('.player2_select').hide();
@@ -105,6 +105,9 @@ function repeatGame() {
 
     newGame = new GameBoard();
     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
+    $(".token." + newGame.playerOne.player).css('visibility', 'hidden');
+    $(".token." + newGame.playerTwo.player).css('visibility', 'hidden');
+    $(".card").css('visibility', 'visible');
     newGame.fillBoard(7, 6);
     newGame.createGameBoard(7, 6);
 
@@ -157,16 +160,16 @@ function GameBoard() {
     ]
 }
 
-GameBoard.prototype.tokenClicked = function () {
+function tokenClicked() {
     //make sure token matches current player
-    var tokenClicked = $(event.target).attr('class').split(" ")[0];
-    if(tokenClicked !== this.currentPlayer.player){
+    var tokenClicked = $(this).attr('class').split(" ")[0];
+    if(tokenClicked !== newGame.currentPlayer.player){
       return;
     }
-    this.tokenActivated = true;
-    this.currentPlayer.tokenCount--;
-    if(!this.currentPlayer.tokenCount){
-      $(".token." + this.currentPlayer.player).css('visibility', 'hidden');
+    newGame.tokenActivated = true;
+    newGame.currentPlayer.tokenCount--;
+    if(!newGame.currentPlayer.tokenCount){
+      $(".token." + newGame.currentPlayer.player).css('visibility', 'hidden');
     }
 };
 
