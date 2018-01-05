@@ -317,6 +317,7 @@ GameBoard.prototype.CheckIfWinner = function (vertPosition, horizPosition) {
     this.checkIfDiagonalWinner(this.currentPlayer.horizontalPicks.sort().reverse(), "-");//increasing matches
     var entireGameBoardFilled = this.board[0].every(this.gameBoardFilled);
     if (entireGameBoardFilled) {
+        tieModal();
         console.log('cats game');
         this.gameOver = true;
     }
@@ -452,17 +453,31 @@ function victoryModal() {
     $(".modal-content button").text("RESULTS");
 
 }
-function introModal(){
-    $(".fade").toggle();
-    // $(".modal-dialog").css({
-    //     "top": "25vh"
-    // });
-    $(".modal-content").css({
-        "width": "30vw",
-        "height": "30vh"
-    });
-    $(".modal-title").text("Tetron");
-    $(".modal-body p").text("The rules go here");
 
-    $(".modal-content button ").text("Play Game")
+function tieModal() {
+    $(".fade").show();
+    $(".modal-dialog").css({
+        "top": "25vh"
+    });
+    $(".modal-content").css({
+        "width": "35vw",
+        "height": "45vh"
+    });
+    $(".modal-content h1").text("TIE")
+        .addClass('neonText').css({
+        "font-size": "3em",
+        "font-family": "'Audiowide', cursive",
+        "font-weight": "bolder",
+        "top": "20%",
+        "left": "50%",
+        "transform": "translate(-50%, -50%)",
+        "padding": "20px",
+        "color": "#fff",
+        "text-align": "center",
+        "text-shadow":
+        "0 0 5px #0062FF, 0 0 10px #0062FF, 0 0 15px #0062FF, 0 0 20px #0062FF, 0 0 25px" +
+        " #0062FF, 0 0 30px #0062FF"
+    });
+    $(".modal-content button").text("RESULTS");
+
 }
