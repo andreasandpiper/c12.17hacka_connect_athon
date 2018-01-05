@@ -4,6 +4,8 @@ function initializeApp() {
 
     loadTitle();
     $('#reset-button').on('click', repeatGame);
+    $('.token').on('click', newGame.tokenClicked.bind(newGame));
+
     $('.close-modal').on('click', function () {
         $('#reset-button').css('visibility', 'visible');
         $('.fade').hide();
@@ -154,6 +156,24 @@ function GameBoard() {
     ]
 }
 
+GameBoard.prototype.tokenClicked = function (){
+    //make sure token matches current player
+    var tokenClicked = $(event.target).attr('class').split(" ")[0];
+    console.log('clicked')
+    if(tokenClicked !== this.currentPlayer.player){
+      console.log('wrong player')
+
+      return;
+    }
+    console.log('actiavted')
+
+    this.tokenActivated = true;
+    if(!this.currentPlayer.tokenCount){
+      $(".token." + this.currentPlayer.player).css('visibility', 'hidden');
+
+    }
+}
+
 GameBoard.prototype.checkIfTetrisMatch = function (array){
   if(!this.tetrisShapes.length){
     return;
@@ -176,15 +196,22 @@ GameBoard.prototype.checkIfTetrisMatch = function (array){
       match = true;
     }
     if(match){
+
+      if(!this.currentPlayer.tokenCount){
+        $(".token." + this.currentPlayer.player).css('visibility', 'visible');
+      }
       this.currentPlayer.tokenCount++;
       this.tetrisShapes.shift();
+      if(!this.tetrisShapes.length){
+        $('.card').css('visibility', 'hidden');
+      }
       return;
     }
   }
 }
 
 GameBoard.prototype.dropAllChipsFromColumn = function(col){
-  debugger;
+
   for(var row=0 ; row < this.board.length; row++){
     if(this.board[row][col].filled){
       var targetSquareClasses = $('.col' + col + ".row" + row).attr("class").split(" ");
@@ -227,6 +254,9 @@ GameBoard.prototype.columnClicked = function (event) {
     if(this.tokenActivated){
       this.dropAllChipsFromColumn(column);
       this.currentPlayer.tokenCount--;
+      if(!this.currentPlayer.tokenCount){
+        $(".token." + this.currentPlayer.player).css('visibility', 'hidden');
+      }
       this.tokenActivated = false; //if add animation, change location of this
       return;
     }
@@ -431,4 +461,3 @@ function introModal(){
 
     $(".modal-content button ").text("Play Game")
 }
-
