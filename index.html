@@ -1,114 +1,142 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link href="https://fonts.googleapis.com/css?family=Anonymous+Pro|Roboto+Mono|VT323|Audiowide"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Anonymous+Pro|Roboto+Mono|VT323|Audiowide" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
-
     <link rel="stylesheet" href="style.css">
     <script src="game.js"></script>
 </head>
 
 <body>
 
+
+<!-- Title Screen / Character Selection -->
 <div class="title_page">
+
     <div class="greeting_screen">
         <p>Initializing...</p>
         <p>No users found...</p>
         <p>Establishing connection with player 1...</p>
         <p>Establishing connection with player 2...</p>
     </div>
+
     <div class="player1_select">
+
         <div class="player_names">
             <label for="player1_name"><span>Player 1:</span></label>
             <input type="text" name="player1_name" id="player1_name" placeholder="enter name">
         </div>
-        <div class="rules"><span>HOW TO PLAY</span><br><br>
-            Players alternate by selecting a column to drop a chip to the bottom of desired column. <br>
-            <br>
+
+        <div class="rules">
+            <span>HOW TO PLAY</span><br><br>
+            Players alternate by selecting a column to drop a chip to the bottom of desired column.<br><br>
             Only one chip can occupy a spot.<br><br>
             The game is over when a player has 4 chips in a row or there are no available spots on the board.<br><br>
             A player can win with a vertical, horizontal, or diagonal match.<br><br>
             Match the shape displayed on the card to earn a game token.<br><br>
             Game tokens clear an entire column of your choosing!
         </div>
+
         <div>
             <img class="blue" src="../c12.17hacka_connect_athon/images/disks/blueDisk.png">
             <img class="green" src="../c12.17hacka_connect_athon/images/disks/greenDisk.png">
             <img class="purple" src="../c12.17hacka_connect_athon/images/disks/purpleDisk.png">
-        </div>
-        <div>
             <img class="red" src="../c12.17hacka_connect_athon/images/disks/redDisk.png">
             <img class="yellow" src="../c12.17hacka_connect_athon/images/disks/yellowDisk.png">
         </div>
+
         <button type="button" class="proceed_button">proceed...</button>
+
     </div>
+
     <div class="player2_select">
+
         <div class="player_names">
             <label for="player2_name"><span>Player 2:</span></label>
             <input type="text" name="player2_name" id="player2_name" placeholder="enter name">
         </div>
-        <div class="rules"><span>HOW TO PLAY</span><br><br>
-            Players alternate by selecting a column to drop a chip to the bottom of desired column. <br>
-            <br>
+
+        <div class="rules">
+            <span>HOW TO PLAY</span><br><br>
+            Players alternate by selecting a column to drop a chip to the bottom of desired column.<br><br>
             Only one chip can occupy a spot.<br><br>
             The game is over when a player has 4 chips in a row or there are no available spots on the board.<br><br>
             A player can win with a vertical, horizontal, or diagonal match.<br><br>
             Match the shape displayed on the card to earn a game token.<br><br>
             Game tokens clear an entire column of your choosing!
         </div>
+
         <div>
             <img class="blue" src="../c12.17hacka_connect_athon/images/disks/blueDisk.png">
             <img class="green" src="../c12.17hacka_connect_athon/images/disks/greenDisk.png">
             <img class="purple" src="../c12.17hacka_connect_athon/images/disks/purpleDisk.png">
-        </div>
-        <div>
             <img class="red" src="../c12.17hacka_connect_athon/images/disks/redDisk.png">
             <img class="yellow" src="../c12.17hacka_connect_athon/images/disks/yellowDisk.png">
         </div>
+
         <button type="button" class="proceed_button">proceed...</button>
+
     </div>
 </div>
 
 
+<!-- Game Screen -->
 <div id="page_content">
+
     <header>
+
         <div class="name">Player 1</div>
         <div class="name">Player 2</div>
+
     </header>
+
     <div id="main">
+
         <div id="left_margin">
+
             <img src="images/GameCoin.svg" class="playerOne token">
             <img src="images/ShapeMatch.svg" class="playerTwo card">
+
         </div>
+
         <div class="aspect_ratio">
+
             <div id="pre_drop_disk_box">
                 <div class="preDropDisk"></div>
             </div>
+
             <div class="game_grid"></div>
             <div class="game_board"></div>
+
         </div>
+
         <div id="right_margin">
             <img src="images/GameCoin.svg" class="playerTwo token">
             <img src="images/ShapeMatch.svg" class="playerTwo card">
         </div>
+
     </div>
 
     <footer>
+
         <div id="player1"></div>
         <button type="button" id="reset-button" class="animated infinite pulse">RESET</button>
         <div id="player2"></div>
+
     </footer>
 
     <!-- Modal content -->
     <div id="modal" class="modal fade ">
+
         <div class="shadow-box"></div>
+
         <div class="modal-content">
             <h1>you won</h1>
             <img src="images/Portal.svg">
             <button class="modal-action close-modal">Play Again</button>
         </div>
+
     </div>
 </div>
 </body>

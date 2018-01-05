@@ -13,13 +13,13 @@ function initializeApp() {
 
     // Sets Player Colors
     $(".player1_select img").on('click', function () {
-        $howToPlay = $('.player1_select .rules span');
+        var $howToPlay = $('.player1_select .rules span');
         $howToPlay.removeClass('neonText-' + newGame.playerOne.playerColor);
         newGame.playerOne.playerColor = $(this).attr('class');
         $howToPlay.addClass('neonText-' + newGame.playerOne.playerColor);
     });
     $(".player2_select img").on('click', function () {
-        $howToPlay = $('.player2_select .rules span');
+        var $howToPlay = $('.player2_select .rules span');
         $howToPlay.removeClass('neonText-' + newGame.playerTwo.playerColor);
         newGame.playerTwo.playerColor = $(this).attr('class');
         $howToPlay.addClass('neonText-' + newGame.playerTwo.playerColor);
@@ -28,7 +28,6 @@ function initializeApp() {
     // Sets Player Names & Advances to Next Screen
     $('.player1_select .proceed_button').on('click', function () {
         newGame.playerOne.name = $('#player1_name').val().toUpperCase();
-        console.log(newGame.playerOne.name);
         if (!(newGame.playerOne.playerColor === "") && !(newGame.playerOne.name === "")) {
             $('.greeting_screen p:nth-child(4)').addClass('anim-typewriter').css('visibility', 'visible');
             $('.player1_select').addClass('animated fadeOut');
@@ -78,15 +77,14 @@ function loadTitle() {
             $('.greeting_screen p:nth-child(3)').addClass('anim-typewriter').css('visibility', 'visible');
             setTimeout(function () {
                 $('.player1_select').addClass('animated fadeIn').show();
-            }, 400);
-        }, 400);
-    }, 400);
+            }, 3000);
+        }, 3000);
+    }, 3000);
 }
 
 function beginGame() {
     $(".game_board").empty();
     $(".game_grid").empty();
-    //create new game
     newGame.createGameBoard(7, 6);
     diskDropInit();
     newGame.currentPlayer = newGame.playerOne;
@@ -95,21 +93,24 @@ function beginGame() {
 }
 
 function repeatGame() {
+
     $('.fade').hide();
+
     var play1name = newGame.playerOne.name;
     var play1color = newGame.playerOne.playerColor;
     var play2name = newGame.playerTwo.name;
     var play2color = newGame.playerTwo.playerColor;
 
-    $(".game_board").empty();
+    newGame = new GameBoard();
+    $(".game_board").empty().on("click", ".square", newGame.columnClicked.bind(newGame));
     $(".game_grid").empty();
 
-    newGame = new GameBoard();
-    $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
     newGame.fillBoard(7, 6);
     newGame.createGameBoard(7, 6);
+
     $(".token." + newGame.playerOne.player).css('visibility', 'hidden');
     $(".token." + newGame.playerTwo.player).css('visibility', 'hidden');
+
     $(".card").css('visibility', 'visible');
 
     newGame.playerOne.name = play1name;
@@ -157,96 +158,91 @@ function GameBoard() {
         }
     };
     this.tetrisShapes = [
-      ['+1 +0','+1 -1','+2 -1']
+        ['+1 +0', '+1 -1', '+2 -1']
     ]
 }
 
-GameBoard.prototype.tokenClicked = function (){
+GameBoard.prototype.tokenClicked = function () {
     //make sure token matches current player
     var tokenClicked = $(event.target).attr('class').split(" ")[0];
-    console.log('clicked')
-    if(tokenClicked !== this.currentPlayer.player){
-      console.log('wrong player')
+    if (tokenClicked !== this.currentPlayer.player) {
 
-      return;
+        return;
     }
-    console.log('actiavted')
-
     this.tokenActivated = true;
-    if(!this.currentPlayer.tokenCount){
-      $(".token." + this.currentPlayer.player).css('visibility', 'hidden');
+    if (!this.currentPlayer.tokenCount) {
+        $(".token." + this.currentPlayer.player).css('visibility', 'hidden');
 
     }
-}
+};
 
-GameBoard.prototype.checkIfTetrisMatch = function (array){
-  if(!this.tetrisShapes.length){
-    return;
-  }
-  array = array.sort();
-  // var tetrisBlocks = tetrisShapes[0][0].split(" ");
-  var match = false;
-  for(var chip=0 ; chip<array.length ; chip++){
-    var chipPosition = array[chip].split("");
-    for(var tetrisChipPos=0 ; tetrisChipPos < this.tetrisShapes[0].length ; tetrisChipPos++){
-      var block = this.tetrisShapes[0][tetrisChipPos].split(" ");
-      var row = this.incrementOrDecrement(chipPosition[0], block[0][0], block[0][1]);
-      var col = this.incrementOrDecrement(chipPosition[1], block[1][0], block[1][1]);
-      var chipToFind = row.toString()+col;
-      // console.log('array' , array, 'chiptofind: ' , chipToFind);
-      if(array.indexOf(chipToFind) === -1){
-        match = false;
-        break;
-      }
-      match = true;
+GameBoard.prototype.checkIfTetrisMatch = function (array) {
+    if (!this.tetrisShapes.length) {
+        return;
     }
-    if(match){
+    array = array.sort();
+    // var tetrisBlocks = tetrisShapes[0][0].split(" ");
+    var match = false;
+    for (var chip = 0; chip < array.length; chip++) {
+        var chipPosition = array[chip].split("");
+        for (var tetrisChipPos = 0; tetrisChipPos < this.tetrisShapes[0].length; tetrisChipPos++) {
+            var block = this.tetrisShapes[0][tetrisChipPos].split(" ");
+            var row = this.incrementOrDecrement(chipPosition[0], block[0][0], block[0][1]);
+            var col = this.incrementOrDecrement(chipPosition[1], block[1][0], block[1][1]);
+            var chipToFind = row.toString() + col;
+            if (array.indexOf(chipToFind) === -1) {
+                match = false;
+                break;
+            }
+            match = true;
+        }
+        if (match) {
 
-      if(!this.currentPlayer.tokenCount){
-        $(".token." + this.currentPlayer.player).css('visibility', 'visible');
-      }
-      this.currentPlayer.tokenCount++;
-      this.tetrisShapes.shift();
-      if(!this.tetrisShapes.length){
-        $('.card').css('visibility', 'hidden');
-      }
-      return;
+            if (!this.currentPlayer.tokenCount) {
+                $(".token." + this.currentPlayer.player).css('visibility', 'visible');
+            }
+            this.currentPlayer.tokenCount++;
+            this.tetrisShapes.shift();
+            if (!this.tetrisShapes.length) {
+                $('.card').css('visibility', 'hidden');
+            }
+            return;
+        }
     }
-  }
-}
+};
 
-GameBoard.prototype.dropAllChipsFromColumn = function(col){
+GameBoard.prototype.dropAllChipsFromColumn = function (col) {
 
-  for(var row=0 ; row < this.board.length; row++){
-    if(this.board[row][col].filled){
-      var targetSquareClasses = $('.col' + col + ".row" + row).attr("class").split(" ");
-        var lastClass = targetSquareClasses[targetSquareClasses.length - 1];
-        var nextLastClass = targetSquareClasses[targetSquareClasses.length - 2];;
+    for (var row = 0; row < this.board.length; row++) {
+        if (this.board[row][col].filled) {
+            var targetSquareClasses = $('.col' + col + ".row" + row).attr("class").split(" ");
+            var lastClass = targetSquareClasses[targetSquareClasses.length - 1];
+            var nextLastClass = targetSquareClasses[targetSquareClasses.length - 2];
 
-        $('.col' + col + ".row" + row).removeClass(lastClass + " " + nextLastClass).removeAttr('style');
-        var chipsToDropIndex = row+ col;
-        if(this.playerOne.horizontalPicks.indexOf(chipsToDropIndex) !== -1){
-            var locationOfCip = this.playerOne.horizontalPicks.indexOf(chipsToDropIndex);
-            this.playerOne.horizontalPicks.splice(locationOfCip, 1)
+            $('.col' + col + ".row" + row).removeClass(lastClass + " " + nextLastClass).removeAttr('style');
+            var chipsToDropIndex = row + col;
+            if (this.playerOne.horizontalPicks.indexOf(chipsToDropIndex) !== -1) {
+                var locationOfCip = this.playerOne.horizontalPicks.indexOf(chipsToDropIndex);
+                this.playerOne.horizontalPicks.splice(locationOfCip, 1)
+            }
+            if (this.playerTwo.horizontalPicks.indexOf(chipsToDropIndex) !== -1) {
+                var locationOfCip = this.playerTwo.horizontalPicks.indexOf(chipsToDropIndex);
+                this.playerTwo.horizontalPicks.splice(locationOfCip, 1)
+            }
+            var chipsToDropIndex = col + row;
+            if (this.playerOne.verticalPicks.indexOf(chipsToDropIndex) !== -1) {
+                var locationOfCip = this.playerOne.verticalPicks.indexOf(chipsToDropIndex);
+                this.playerOne.verticalPicks.splice(locationOfCip, 1)
+            }
+            if (this.playerTwo.verticalPicks.indexOf(chipsToDropIndex) !== -1) {
+                var locationOfCip = this.playerTwo.verticalPicks.indexOf(chipsToDropIndex);
+                this.playerTwo.verticalPicks.splice(locationOfCip, 1)
+            }
+            var newChip = new Chip(false, null);
+            this.board[row][col] = newChip;
         }
-        if(this.playerTwo.horizontalPicks.indexOf(chipsToDropIndex) !== -1){
-            var locationOfCip = this.playerTwo.horizontalPicks.indexOf(chipsToDropIndex);
-            this.playerTwo.horizontalPicks.splice(locationOfCip, 1)
-        }
-        var chipsToDropIndex = col+row;
-        if(this.playerOne.verticalPicks.indexOf(chipsToDropIndex) !== -1){
-            var locationOfCip = this.playerOne.verticalPicks.indexOf(chipsToDropIndex);
-            this.playerOne.verticalPicks.splice(locationOfCip, 1)
-        }
-        if(this.playerTwo.verticalPicks.indexOf(chipsToDropIndex) !== -1){
-            var locationOfCip = this.playerTwo.verticalPicks.indexOf(chipsToDropIndex);
-            this.playerTwo.verticalPicks.splice(locationOfCip, 1)
-        }
-        var newChip = new Chip(false, null);
-        this.board[row][col] = newChip;
+
     }
-
-  }
 }
 
 
@@ -256,14 +252,14 @@ GameBoard.prototype.columnClicked = function (event) {
     var column = targetColumn[targetColumn.length - 1];
     //check to make sure only one animation at a time
     //check if there are open spots in the column
-    if(this.tokenActivated){
-      this.dropAllChipsFromColumn(column);
-      this.currentPlayer.tokenCount--;
-      if(!this.currentPlayer.tokenCount){
-        $(".token." + this.currentPlayer.player).css('visibility', 'hidden');
-      }
-      this.tokenActivated = false; //if add animation, change location of this
-      return;
+    if (this.tokenActivated) {
+        this.dropAllChipsFromColumn(column);
+        this.currentPlayer.tokenCount--;
+        if (!this.currentPlayer.tokenCount) {
+            $(".token." + this.currentPlayer.player).css('visibility', 'hidden');
+        }
+        this.tokenActivated = false; //if add animation, change location of this
+        return;
     }
     if (this.pickedColumn || this.gameOver || this.board[0][column].filled) {
         return
@@ -292,8 +288,8 @@ GameBoard.prototype.chipDrop = function (column) {
             var vertPosition = column + row;
             var horizPosition = row + column;
             this.showChip(column, row);
-            this.currentPlayer.verticalPicks.push(vertPosition)
-            this.currentPlayer.horizontalPicks.push(horizPosition)
+            this.currentPlayer.verticalPicks.push(vertPosition);
+            this.currentPlayer.horizontalPicks.push(horizPosition);
             this.checkIfTetrisMatch(this.currentPlayer.verticalPicks);
             //alternates players
             if (this.currentPlayer === this.playerOne) {
@@ -310,14 +306,13 @@ GameBoard.prototype.chipDrop = function (column) {
     }
 };
 
-GameBoard.prototype.CheckIfWinner = function (vertPosition, horizPosition) {
+GameBoard.prototype.CheckIfWinner = function () {
     this.checkIfXYWinner(this.currentPlayer.horizontalPicks);
     this.checkIfXYWinner(this.currentPlayer.verticalPicks);
     this.checkIfDiagonalWinner(this.currentPlayer.horizontalPicks.sort(), "+");//decreasing matches
     this.checkIfDiagonalWinner(this.currentPlayer.horizontalPicks.sort().reverse(), "-");//increasing matches
     var entireGameBoardFilled = this.board[0].every(this.gameBoardFilled);
     if (entireGameBoardFilled) {
-        console.log('cats game');
         this.gameOver = true;
     }
 };
@@ -347,20 +342,20 @@ GameBoard.prototype.checkIfXYWinner = function (array) {
     previousValue = array[chipIndex];
 };
 
-GameBoard.prototype.incrementOrDecrement = function(currentValue, upOrDown, amount){
-  currentValue = parseInt(currentValue);
-  amount = parseInt(amount);
-  var types = {
-    '+': function(){
-      currentValue += amount;
-    },
-    '-': function(){
-      currentValue -= amount;
-    }
-  }
-  var result = types[upOrDown]();
-  return currentValue;
-}
+GameBoard.prototype.incrementOrDecrement = function (currentValue, upOrDown, amount) {
+    currentValue = parseInt(currentValue);
+    amount = parseInt(amount);
+    var types = {
+        '+': function () {
+            currentValue += amount;
+        },
+        '-': function () {
+            currentValue -= amount;
+        }
+    };
+    var result = types[upOrDown]();
+    return currentValue;
+};
 
 GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown) {
     var diagonalMatchCounter = 1;
@@ -371,10 +366,9 @@ GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown) {
             var lookForChip = (this.incrementOrDecrement(currentChipRow, upOrDown, 1)).toString() + (currentChipCol + 1).toString();
             if (array.indexOf(lookForChip) !== -1) {
                 diagonalMatchCounter++;
-               currentChipRow = this.incrementOrDecrement(currentChipRow, upOrDown, 1);
-               currentChipCol++;
+                currentChipRow = this.incrementOrDecrement(currentChipRow, upOrDown, 1);
+                currentChipCol++;
                 if (diagonalMatchCounter === 4) {
-                  console.log('diasonal win')
                     victoryModal();
                     this.gameOver = true;
                     $(".game_board").off("click", ".square", newGame.columnClicked.bind(newGame));
@@ -383,13 +377,12 @@ GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown) {
                 diagonalMatchCounter = 1;
                 break;
             }
-          }
+        }
     }
 };
 
-
 GameBoard.prototype.showChip = function (column, row) {
-    $gameSquare = $('.square.col' + column + '.row' + row);
+    var $gameSquare = $('.square.col' + column + '.row' + row);
     $gameSquare.addClass(newGame.currentPlayer.playerColor);
     $gameSquare.addClass("fallToRow" + row);
     this.changeColor();
@@ -450,19 +443,4 @@ function victoryModal() {
         "transform": "translate(-50%, -50%)"
     });
     $(".modal-content button").text("RESULTS");
-
-}
-function introModal(){
-    $(".fade").toggle();
-    // $(".modal-dialog").css({
-    //     "top": "25vh"
-    // });
-    $(".modal-content").css({
-        "width": "30vw",
-        "height": "30vh"
-    });
-    $(".modal-title").text("Tetron");
-    $(".modal-body p").text("The rules go here");
-
-    $(".modal-content button ").text("Play Game")
 }
