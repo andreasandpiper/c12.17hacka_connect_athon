@@ -4,7 +4,7 @@ function initializeApp() {
 
     loadTitle();
     $('#reset-button').on('click', repeatGame);
-    $('.close-modal').on('click', function(){
+    $('.close-modal').on('click', function () {
         $('#reset-button').css('visibility', 'visible');
         $('.fade').hide();
     });
@@ -57,6 +57,7 @@ function initializeApp() {
 
 
 var newGame;
+
 /************************************************
  ***************** Title Screen *****************
  ***********************************************/
@@ -117,7 +118,7 @@ function repeatGame() {
 }
 
 function GameBoard() {
-  this.id = Math.random();
+    this.id = Math.random();
     this.gameOver = false;
     this.pickedColumn = false;
     this.board = [];
@@ -221,9 +222,9 @@ GameBoard.prototype.checkIfXYWinner = function (array) {
         if (previousValue[0] === array[chipIndex][0] && (parseInt(previousValue[1]) + 1) == parseInt(currentValue[1])) {
             matchCounter++;
             if (matchCounter === 4) {
-              $(".game_board").off("click", ".square", newGame.columnClicked.bind(newGame));
-              victoryModal();
-              this.gameOver = true;
+                $(".game_board").off("click", ".square", newGame.columnClicked.bind(newGame));
+                victoryModal();
+                this.gameOver = true;
             }
         } else {
             matchCounter = 1;
@@ -262,10 +263,14 @@ GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown) {
                     this.gameOver = true;
                     $(".game_board").off("click", ".square", newGame.columnClicked.bind(newGame));
                 }
+            } else {
+                diagonalMatchCounter = 1;
+                break;
             }
         }
     }
 };
+
 
 GameBoard.prototype.showChip = function (column, row) {
     $gameSquare = $('.square.col' + column + '.row' + row);
@@ -278,7 +283,7 @@ GameBoard.prototype.changeColor = function () {
     if (this.currentPlayer === this.playerOne) {
         $('#player1').addClass('neonText-' + this.playerOne.playerColor);
         $('#player2').removeClass('neonText-' + this.playerTwo.playerColor);
-        $(".preDropDisk").switchClass(this.playerTwo.playerColor,this.playerOne.playerColor);
+        $(".preDropDisk").switchClass(this.playerTwo.playerColor, this.playerOne.playerColor);
     } else {
         $('#player2').addClass('neonText-' + this.playerTwo.playerColor);
         $('#player1').removeClass('neonText-' + this.playerOne.playerColor);
@@ -299,7 +304,7 @@ function diskDropInit() {
     var $disk = $(".preDropDisk");
     $(document).on('mousemove', function (e) {
         $disk.css({
-            left: e.pageX - ($('#pre_drop_disk_box')[0].getBoundingClientRect().left - $('body')[0].getBoundingClientRect().left+60),
+            left: e.pageX - ($('#pre_drop_disk_box')[0].getBoundingClientRect().left - $('body')[0].getBoundingClientRect().left + 60),
             top: 10
         });
     });
@@ -310,15 +315,7 @@ function diskDropInit() {
  ************** Modal manipulation ********************
  *****************************************************/
 
-function alignModal() {
-    var modalDialog = $(this).find(".modal-dialog");
-    /* Applying the top margin on modal dialog to align it vertically center */
-    modalDialog.css("margin-top", Math.max(0, ($(window).height() - modalDialog.height()) / 2));
-}
-
-
-
-function victoryModal(){
+function victoryModal() {
     $(".fade").show();
     $(".modal-dialog").css({
         "top": "25vh"
@@ -328,7 +325,7 @@ function victoryModal(){
         "height": "45vh"
     });
     $(".modal-content h1").text(newGame.currentPlayer.name + " WINS!")
-        .addClass('neonText-'+newGame.currentPlayer.playerColor).css({
+        .addClass('neonText-' + newGame.currentPlayer.playerColor).css({
         "font-size": "3em",
         "font-family": "'Audiowide', cursive",
         "font-weight": "bolder",
@@ -338,19 +335,4 @@ function victoryModal(){
     });
     $(".modal-content button").text("RESULTS");
 
-}
-
-function introModal(){
-    $(".fade").toggle();
-    // $(".modal-dialog").css({
-    //     "top": "25vh"
-    // });
-    $(".modal-content").css({
-        "width": "30vw",
-        "height": "30vh"
-    });
-    $(".modal-title").text("Tetron");
-    $(".modal-body p").text("The rules go here");
-
-    $(".modal-content button ").text("Play Game")
 }
