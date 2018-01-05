@@ -4,8 +4,6 @@ function initializeApp() {
 
     loadTitle();
     $('#reset-button').on('click', repeatGame);
-    $('.token').on('click', newGame.tokenClicked.bind(newGame));
-
     $('.close-modal').on('click', function () {
         $('#reset-button').css('visibility', 'visible');
         $('.fade').hide();
@@ -66,6 +64,7 @@ var newGame;
 function loadTitle() {
     newGame = new GameBoard();
     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
+    $('.token').on('click', newGame.tokenClicked.bind(newGame));
     newGame.fillBoard(7, 6);
     $('.player1_select').hide();
     $('.player2_select').hide();
@@ -104,7 +103,11 @@ function repeatGame() {
     newGame = new GameBoard();
     $(".game_board").empty().on("click", ".square", newGame.columnClicked.bind(newGame));
     $(".game_grid").empty();
-
+    $('.token').off('click', newGame.tokenClicked.bind(newGame));
+    newGame = new GameBoard();
+    $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
+    $('.token').on('click', newGame.tokenClicked.bind(newGame));
+  
     newGame.fillBoard(7, 6);
     newGame.createGameBoard(7, 6);
 
@@ -165,16 +168,16 @@ function GameBoard() {
 GameBoard.prototype.tokenClicked = function () {
     //make sure token matches current player
     var tokenClicked = $(event.target).attr('class').split(" ")[0];
-    if (tokenClicked !== this.currentPlayer.player) {
-
-        return;
+    if(tokenClicked !== this.currentPlayer.player){
+      return;
     }
     this.tokenActivated = true;
-    if (!this.currentPlayer.tokenCount) {
-        $(".token." + this.currentPlayer.player).css('visibility', 'hidden');
-
+    this.currentPlayer.tokenCount--;
+    if(!this.currentPlayer.tokenCount){
+      $(".token." + this.currentPlayer.player).css('visibility', 'hidden');
     }
 };
+
 
 GameBoard.prototype.checkIfTetrisMatch = function (array) {
     if (!this.tetrisShapes.length) {
@@ -245,21 +248,17 @@ GameBoard.prototype.dropAllChipsFromColumn = function (col) {
     }
 }
 
-
 GameBoard.prototype.columnClicked = function (event) {
     //get which column was clicked from the class
     var targetColumn = $(event.target).attr("class").split(" ")[1];
+    console.log(targetColumn)
     var column = targetColumn[targetColumn.length - 1];
     //check to make sure only one animation at a time
     //check if there are open spots in the column
-    if (this.tokenActivated) {
-        this.dropAllChipsFromColumn(column);
-        this.currentPlayer.tokenCount--;
-        if (!this.currentPlayer.tokenCount) {
-            $(".token." + this.currentPlayer.player).css('visibility', 'hidden');
-        }
-        this.tokenActivated = false; //if add animation, change location of this
-        return;
+    if(this.tokenActivated){
+      this.dropAllChipsFromColumn(column);
+      this.tokenActivated = false; //if add animation, change location of this
+      return;
     }
     if (this.pickedColumn || this.gameOver || this.board[0][column].filled) {
         return
@@ -313,6 +312,7 @@ GameBoard.prototype.CheckIfWinner = function () {
     this.checkIfDiagonalWinner(this.currentPlayer.horizontalPicks.sort().reverse(), "-");//increasing matches
     var entireGameBoardFilled = this.board[0].every(this.gameBoardFilled);
     if (entireGameBoardFilled) {
+        tieModal();
         this.gameOver = true;
     }
 };
@@ -443,4 +443,32 @@ function victoryModal() {
         "transform": "translate(-50%, -50%)"
     });
     $(".modal-content button").text("RESULTS");
+}
+
+function tieModal() {
+    $(".fade").show();
+    $(".modal-dialog").css({
+        "top": "25vh"
+    });
+    $(".modal-content").css({
+        "width": "35vw",
+        "height": "45vh"
+    });
+    $(".modal-content h1").text("TIE")
+        .addClass('neonText').css({
+        "font-size": "3em",
+        "font-family": "'Audiowide', cursive",
+        "font-weight": "bolder",
+        "top": "20%",
+        "left": "50%",
+        "transform": "translate(-50%, -50%)",
+        "padding": "20px",
+        "color": "#fff",
+        "text-align": "center",
+        "text-shadow":
+        "0 0 5px #0062FF, 0 0 10px #0062FF, 0 0 15px #0062FF, 0 0 20px #0062FF, 0 0 25px" +
+        " #0062FF, 0 0 30px #0062FF"
+    });
+    $(".modal-content button").text("RESULTS");
+
 }
