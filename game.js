@@ -75,9 +75,9 @@ function loadTitle() {
             $('.greeting_screen p:nth-child(3)').addClass('anim-typewriter').css('visibility', 'visible');
             setTimeout(function () {
                 $('.player1_select').addClass('animated fadeIn').show();
-            }, 4000);
-        }, 4000);
-    }, 4000);
+            }, 400);
+        }, 400);
+    }, 400);
 }
 
 function beginGame() {
