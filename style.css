@@ -81,6 +81,7 @@ header{
     font-size: 150%;
     margin: 5%;
     border: 1px white solid;
+    background-color: #181818
 }
 .player_names input{
     background-color: #181818;
@@ -223,7 +224,7 @@ footer{
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Roboto Mono', monospace;
+    font-family: 'Audiowide', cursive;
     font-weight: bolder;
 }
 
@@ -240,11 +241,16 @@ footer{
 #reset-button{
     visibility: hidden;
     height:5vh;
-    padding: 0 0 0 15px;
+    font-size: 2em;
+    color: #FFFFFF;
+    padding: 0 0 0 7px;
     width:10%;
-    letter-spacing: 15px;
+    letter-spacing: 1vw;
     font-family: 'VT323', monospace;
     font-weight: bolder;
+    border: 3px solid #ffffff;
+    border-radius: 3px;
+    background-color: #181818
 }
 
 .animated.infinite {
