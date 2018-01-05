@@ -153,17 +153,6 @@ function GameBoard() {
     this.tetrisShapes = [
       ['+1 +0','+1 -1','+2 -1']
     ]
-    this.currentPlayer = this.playerOne;
-    this.createGameBoard = function (width, height) {
-        for (var row = 0; row < height; row++) {
-            for (var col = 0; col < width; col++) {
-                var square = $('<div>').addClass("square col" + col + " row" + row).attr("draggable", false);
-                $(".game_board").append(square);
-                var gridSquare = $('<div>').addClass('game_grid_squares');
-                $(".game_grid").append(gridSquare);
-            }
-        }
-    }
 }
 
 GameBoard.prototype.checkIfTetrisMatch = function (array){
@@ -196,11 +185,14 @@ GameBoard.prototype.checkIfTetrisMatch = function (array){
 }
 
 GameBoard.prototype.dropAllChipsFromColumn = function(col){
-  $('.col' + col).removeAttr('style');
+  debugger;
   for(var row=0 ; row < this.board.length; row++){
     if(this.board[row][col].filled){
-        var lastClass = $('.col' + col + ".row" + row).attr("class").split(" ").pop();
-        $('.col' + col + ".row" + row).removeClass(lastClass);
+      var targetSquareClasses = $('.col' + col + ".row" + row).attr("class").split(" ");
+        var lastClass = targetSquareClasses[targetSquareClasses.length - 1];
+        var nextLastClass = targetSquareClasses[targetSquareClasses.length - 2];;
+
+        $('.col' + col + ".row" + row).removeClass(lastClass + " " + nextLastClass).removeAttr('style');
         var chipsToDropIndex = row+ col;
         if(this.playerOne.horizontalPicks.indexOf(chipsToDropIndex) !== -1){
             var locationOfCip = this.playerOne.horizontalPicks.indexOf(chipsToDropIndex);
