@@ -89,6 +89,7 @@ header{
     font-size: 100%;
     font-family: 'VT323', monospace;
     border: none;
+    outline: none; 
 }
 
 .title_page img{
