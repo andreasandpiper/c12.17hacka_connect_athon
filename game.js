@@ -108,6 +108,10 @@ function repeatGame() {
     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
     newGame.fillBoard(7, 6);
     newGame.createGameBoard(7, 6);
+    $(".token." + newGame.playerOne.player).css('visibility', 'hidden');
+    $(".token." + newGame.playerTwo.player).css('visibility', 'hidden');
+    $(".card").css('visibility', 'visible');
+
     newGame.playerOne.name = play1name;
     newGame.playerOne.playerColor = play1color;
     newGame.playerTwo.name = play2name;
@@ -120,6 +124,7 @@ function repeatGame() {
 }
 
 function GameBoard() {
+    this.tokenActivated = false;
     this.id = Math.random();
     this.gameOver = false;
     this.pickedColumn = false;
