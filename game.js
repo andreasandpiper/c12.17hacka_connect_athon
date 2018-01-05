@@ -116,8 +116,6 @@ function repeatGame() {
     $('#reset-button').css('visibility', 'hidden');
 }
 
-
-
 function GameBoard() {
   this.id = Math.random();
     this.gameOver = false;
@@ -248,7 +246,6 @@ GameBoard.prototype.incrementOrDecrement = function (currentValue, upOrDown) {
     return currentValue;
 };
 
-
 GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown) {
     var diagonalMatchCounter = 1;
     for (var chipIndex = 0; chipIndex < array.length; chipIndex++) {
@@ -313,14 +310,6 @@ function diskDropInit() {
  ************** Modal manipulation ********************
  *****************************************************/
 
-function alignModal() {
-    var modalDialog = $(this).find(".modal-dialog");
-    /* Applying the top margin on modal dialog to align it vertically center */
-    modalDialog.css("margin-top", Math.max(0, ($(window).height() - modalDialog.height()) / 2));
-}
-
-
-
 function victoryModal(){
     $(".fade").show();
     $(".modal-dialog").css({
@@ -341,19 +330,4 @@ function victoryModal(){
     });
     $(".modal-content button").text("RESULTS");
 
-}
-
-function introModal(){
-    $(".fade").toggle();
-    // $(".modal-dialog").css({
-    //     "top": "25vh"
-    // });
-    $(".modal-content").css({
-        "width": "30vw",
-        "height": "30vh"
-    });
-    $(".modal-title").text("Tetron");
-    $(".modal-body p").text("The rules go here");
-
-    $(".modal-content button ").text("Play Game")
 }
