@@ -4,8 +4,6 @@ function initializeApp() {
 
     loadTitle();
     $('#reset-button').on('click', repeatGame);
-    $('.token').on('click', newGame.tokenClicked.bind(newGame));
-
     $('.close-modal').on('click', function () {
         $('#reset-button').css('visibility', 'visible');
         $('.fade').hide();
@@ -67,6 +65,7 @@ var newGame;
 function loadTitle() {
     newGame = new GameBoard();
     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
+    $('.token').on('click', newGame.tokenClicked.bind(newGame));
     newGame.fillBoard(7, 6);
     $('.player1_select').hide();
     $('.player2_select').hide();
@@ -95,6 +94,7 @@ function beginGame() {
 }
 
 function repeatGame() {
+
     $('.fade').hide();
     var play1name = newGame.playerOne.name;
     var play1color = newGame.playerOne.playerColor;
@@ -103,9 +103,10 @@ function repeatGame() {
 
     $(".game_board").empty();
     $(".game_grid").empty();
-
+    $('.token').off('click', newGame.tokenClicked.bind(newGame));
     newGame = new GameBoard();
     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
+    $('.token').on('click', newGame.tokenClicked.bind(newGame));
     newGame.fillBoard(7, 6);
     newGame.createGameBoard(7, 6);
     $(".token." + newGame.playerOne.player).css('visibility', 'hidden');
@@ -164,18 +165,13 @@ function GameBoard() {
 GameBoard.prototype.tokenClicked = function (){
     //make sure token matches current player
     var tokenClicked = $(event.target).attr('class').split(" ")[0];
-    console.log('clicked')
     if(tokenClicked !== this.currentPlayer.player){
-      console.log('wrong player')
-
       return;
     }
-    console.log('actiavted')
-
     this.tokenActivated = true;
+    this.currentPlayer.tokenCount--;
     if(!this.currentPlayer.tokenCount){
       $(".token." + this.currentPlayer.player).css('visibility', 'hidden');
-
     }
 }
 
@@ -193,7 +189,6 @@ GameBoard.prototype.checkIfTetrisMatch = function (array){
       var row = this.incrementOrDecrement(chipPosition[0], block[0][0], block[0][1]);
       var col = this.incrementOrDecrement(chipPosition[1], block[1][0], block[1][1]);
       var chipToFind = row.toString()+col;
-      // console.log('array' , array, 'chiptofind: ' , chipToFind);
       if(array.indexOf(chipToFind) === -1){
         match = false;
         break;
@@ -253,15 +248,12 @@ GameBoard.prototype.dropAllChipsFromColumn = function(col){
 GameBoard.prototype.columnClicked = function (event) {
     //get which column was clicked from the class
     var targetColumn = $(event.target).attr("class").split(" ")[1];
+    console.log(targetColumn)
     var column = targetColumn[targetColumn.length - 1];
     //check to make sure only one animation at a time
     //check if there are open spots in the column
     if(this.tokenActivated){
       this.dropAllChipsFromColumn(column);
-      this.currentPlayer.tokenCount--;
-      if(!this.currentPlayer.tokenCount){
-        $(".token." + this.currentPlayer.player).css('visibility', 'hidden');
-      }
       this.tokenActivated = false; //if add animation, change location of this
       return;
     }
@@ -370,11 +362,10 @@ GameBoard.prototype.checkIfDiagonalWinner = function (array, upOrDown) {
         for (var compareChip = chipIndex; compareChip < array.length; compareChip++) {
             var lookForChip = (this.incrementOrDecrement(currentChipRow, upOrDown, 1)).toString() + (currentChipCol + 1).toString();
             if (array.indexOf(lookForChip) !== -1) {
-                diagonalMatchCounter++;
+              diagonalMatchCounter++;
                currentChipRow = this.incrementOrDecrement(currentChipRow, upOrDown, 1);
                currentChipCol++;
                 if (diagonalMatchCounter === 4) {
-                  console.log('diasonal win')
                     victoryModal();
                     this.gameOver = true;
                     $(".game_board").off("click", ".square", newGame.columnClicked.bind(newGame));
