@@ -103,10 +103,10 @@ function repeatGame() {
 
     $(".game_board").empty();
     $(".game_grid").empty();
-    $('.token').off('click', newGame.tokenClicked.bind(newGame));
+    // $('.token').off('click', newGame.tokenClicked.bind(newGame));
     newGame = new GameBoard();
     $(".game_board").on("click", ".square", newGame.columnClicked.bind(newGame));
-    $('.token').on('click', newGame.tokenClicked.bind(newGame));
+    // $('.token').on('click', newGame.tokenClicked.bind(newGame));
     newGame.fillBoard(7, 6);
     newGame.createGameBoard(7, 6);
     $(".token." + newGame.playerOne.player).css('visibility', 'hidden');
@@ -180,7 +180,6 @@ GameBoard.prototype.checkIfTetrisMatch = function (array){
     return;
   }
   array = array.sort();
-  // var tetrisBlocks = tetrisShapes[0][0].split(" ");
   var match = false;
   for(var chip=0 ; chip<array.length ; chip++){
     var chipPosition = array[chip].split("");
@@ -248,7 +247,6 @@ GameBoard.prototype.dropAllChipsFromColumn = function(col){
 GameBoard.prototype.columnClicked = function (event) {
     //get which column was clicked from the class
     var targetColumn = $(event.target).attr("class").split(" ")[1];
-    console.log(targetColumn)
     var column = targetColumn[targetColumn.length - 1];
     //check to make sure only one animation at a time
     //check if there are open spots in the column
