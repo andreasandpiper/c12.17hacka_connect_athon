@@ -79,8 +79,9 @@ header{
     color: white;
     font-family: 'VT323', monospace;
     font-size: 150%;
-    margin: 5%;
+    margin: 2%;
     border: 1px white solid;
+    background-color: #181818
 }
 .player_names input{
     background-color: #181818;
@@ -88,6 +89,7 @@ header{
     font-size: 100%;
     font-family: 'VT323', monospace;
     border: none;
+    outline: none; 
 }
 
 .title_page img{
@@ -103,7 +105,7 @@ header{
     color: white;
     font-family: 'VT323', monospace;
     width: 80%;
-    margin-bottom: 5%;
+    margin-bottom: 4%;
     font-size: 90%;
 }
 
@@ -126,7 +128,6 @@ header{
 ****************** Game Screen ******************
 *************************************************/
 
-
 #page_content{
     position: relative;
     display: block;
@@ -144,6 +145,19 @@ header{
 #left_margin,
 #right_margin{
     width: 12.5%;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+}
+
+.token,
+.card{
+    position: relative;
+    width:90%;
+}
+.token{
+    visibility: hidden;
+    cursor: pointer;
 }
 
 .aspect_ratio{
@@ -202,15 +216,13 @@ header{
     pointer-events: none;
 }
 
-
-
 footer{
     height: 20%;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Roboto Mono', monospace;
+    font-family: 'Audiowide', cursive;
     font-weight: bolder;
 }
 
@@ -227,11 +239,16 @@ footer{
 #reset-button{
     visibility: hidden;
     height:5vh;
-    padding: 0 0 0 15px;
+    font-size: 2em;
+    color: #FFFFFF;
+    padding: 0 0 0 7px;
     width:10%;
-    letter-spacing: 15px;
+    letter-spacing: 1vw;
     font-family: 'VT323', monospace;
     font-weight: bolder;
+    border: 3px solid #ffffff;
+    border-radius: 1px;
+    background-color: #181818
 }
 
 .animated.infinite {
@@ -271,8 +288,7 @@ footer{
             0 0 15px #0062FF,
             0 0 20px #0062FF,
             0 0 25px #0062FF,
-            0 0 30px #0062FF
-;
+            0 0 30px #0062FF;
 }
 .neonText-green{
     font-size:100px;
@@ -285,8 +301,7 @@ footer{
             0 0 15px #00ff66,
             0 0 20px #00ff66,
             0 0 25px #00ff66,
-            0 0 30px #00ff66
-;
+            0 0 30px #00ff66;
 }
 .neonText-purple{
     font-size:100px;
@@ -327,10 +342,6 @@ footer{
             0 0 25px #FFFF33,
             0 0 30px #FFFF33;
 }
-
-
-
-
 
 /************************************************
 ****************** Modal styling ****************
@@ -375,7 +386,7 @@ footer{
     width: 40%;
     transform: translate(-50%, 0);
 }
-.modal-action{
+.modal-action {
     position: absolute;
     width: 32%;
     height: 13%;
@@ -386,17 +397,10 @@ footer{
     font-size: 2em;
     font-family: 'VT323', monospace;
     font-weight: bolder;
-    /*text-shadow:*/
-            /*0 0 5px #00bfff,*/
-            /*0 0 10px #00bfff,*/
-            /*0 0 15px #00bfff,*/
-            /*0 0 20px #00bfff,*/
-            /*0 0 25px #00bfff,*/
-            /*0 0 30px #00bfff;*/
+
     border: 3px solid #ffffff;
     border-radius: 3px;
-    background-color: #050505/*rgba(67, 187, 212, 0.3)*/;
-    /*box-shadow: 0 0 10px #00bfff;*/
+    background-color: #050505;
 }
 
 /************************************************
@@ -531,7 +535,6 @@ footer{
     from {
         opacity: 0;
     }
-
     to {
         opacity: 1;
     }
@@ -566,7 +569,7 @@ footer{
 .preDropDisk {
     background-size: contain;
     position: absolute;
-    width: 16%;
+    width: 14.5%;
     height:100%;
     z-index: 1;
 }
